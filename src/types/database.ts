@@ -4,7 +4,10 @@ export type ConversaRole = 'user' | 'assistant' | 'system' | 'human'
 
 export interface ConfigCliente {
   instance_id: string
+  slug: string | null
   nome_empresa: string | null
+  logo_url: string | null
+  cor_primaria: string | null
   horario_funcionamento: string | null
   tom_voz: string | null
   numero_humano: string | null

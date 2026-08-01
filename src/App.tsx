@@ -7,11 +7,13 @@ import Contatos from '@/pages/Contatos'
 import Agendamentos from '@/pages/Agendamentos'
 import Estatisticas from '@/pages/Estatisticas'
 import Configuracoes from '@/pages/Configuracoes'
+import AgendarPublico from '@/pages/public/AgendarPublico'
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/agendar/:slug" element={<AgendarPublico />} />
       <Route
         path="/"
         element={

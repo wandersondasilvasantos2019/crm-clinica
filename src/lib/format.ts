@@ -12,6 +12,10 @@ export function formatDateTime(value: string | Date): string {
   return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(date)
 }
 
+export function capitalizeFirst(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 export function formatPhone(phone: string): string {
   const digits = phone.replace(/\D/g, '')
   if (digits.length === 13) {
