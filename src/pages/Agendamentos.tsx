@@ -71,8 +71,8 @@ export default function Agendamentos() {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">Agendamentos</h1>
-          <p className="text-sm text-gray-400">Gerencie a agenda da clínica</p>
+          <h1 className="text-2xl font-bold text-gray-900">Agendamentos</h1>
+          <p className="text-sm text-brand-gray">Gerencie a agenda da clínica</p>
         </div>
         <button
           className="btn-primary"
@@ -107,7 +107,7 @@ export default function Agendamentos() {
             onClick={() => setViewMode('calendario')}
             className={clsx(
               'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition',
-              viewMode === 'calendario' ? 'bg-emerald-600 text-white' : 'text-gray-500'
+              viewMode === 'calendario' ? 'bg-brand-primary text-white' : 'text-brand-gray'
             )}
           >
             <CalendarRange className="h-4 w-4" />
@@ -117,7 +117,7 @@ export default function Agendamentos() {
             onClick={() => setViewMode('tabela')}
             className={clsx(
               'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition',
-              viewMode === 'tabela' ? 'bg-emerald-600 text-white' : 'text-gray-500'
+              viewMode === 'tabela' ? 'bg-brand-primary text-white' : 'text-brand-gray'
             )}
           >
             <List className="h-4 w-4" />
@@ -128,7 +128,7 @@ export default function Agendamentos() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-brand-primary" />
         </div>
       ) : viewMode === 'calendario' ? (
         <CalendarView

@@ -22,7 +22,7 @@ import type { LeadStatus } from '@/types/database'
 type PeriodoDias = 7 | 30 | 90
 
 const FUNIL_STATUSES: LeadStatus[] = ['novo_lead', 'em_atendimento', 'agendado', 'compareceu']
-const FUNIL_COLORS = ['#047857', '#059669', '#10b981', '#6ee7b7']
+const FUNIL_COLORS = ['#002B2A', '#0EA57A', '#13C296', '#8FD9C4']
 
 interface FaturamentoMes {
   mes: string
@@ -136,8 +136,8 @@ export default function Estatisticas() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">Estatísticas</h1>
-          <p className="text-sm text-gray-400">Desempenho da clínica no período selecionado</p>
+          <h1 className="text-2xl font-bold text-gray-900">Estatísticas</h1>
+          <p className="text-sm text-brand-gray">Desempenho da clínica no período selecionado</p>
         </div>
         <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1">
           {([7, 30, 90] as PeriodoDias[]).map((dias) => (
@@ -145,7 +145,7 @@ export default function Estatisticas() {
               key={dias}
               onClick={() => setPeriodo(dias)}
               className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
-                periodo === dias ? 'bg-emerald-600 text-white' : 'text-gray-500'
+                periodo === dias ? 'bg-brand-primary text-white' : 'text-brand-gray'
               }`}
             >
               {dias} dias
@@ -156,14 +156,14 @@ export default function Estatisticas() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-brand-primary" />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="card lg:col-span-2">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-gray-900">Faturamento por mês (realizados)</h2>
-              <span className="text-sm font-semibold text-emerald-600">
+              <span className="text-sm font-semibold text-brand-primary">
                 {formatCurrency(totalFaturamento)}
               </span>
             </div>
@@ -171,8 +171,8 @@ export default function Estatisticas() {
               <BarChart data={faturamento}>
                 <defs>
                   <linearGradient id="faturamentoGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
-                    <stop offset="100%" stopColor="#6ee7b7" stopOpacity={1} />
+                    <stop offset="0%" stopColor="#0EA57A" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#8FD9C4" stopOpacity={1} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
@@ -206,8 +206,8 @@ export default function Estatisticas() {
               <BarChart data={servicos} layout="vertical" margin={{ left: 24 }}>
                 <defs>
                   <linearGradient id="servicosGradient" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#6ee7b7" stopOpacity={1} />
-                    <stop offset="100%" stopColor="#10b981" stopOpacity={1} />
+                    <stop offset="0%" stopColor="#8FD9C4" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#0EA57A" stopOpacity={1} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />

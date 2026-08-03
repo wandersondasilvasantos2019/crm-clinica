@@ -12,7 +12,7 @@ const COLUMN_COLORS: Record<LeadStatus, string> = {
   novo_lead: 'bg-sky-400',
   em_atendimento: 'bg-amber-400',
   agendado: 'bg-violet-400',
-  compareceu: 'bg-emerald-400',
+  compareceu: 'bg-brand-primary',
   perdido: 'bg-rose-400',
 }
 
@@ -126,8 +126,8 @@ export default function Contatos() {
     <div className="flex h-full flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">Contatos</h1>
-          <p className="text-sm text-gray-400">Acompanhe leads e pacientes por estágio</p>
+          <h1 className="text-2xl font-bold text-gray-900">Contatos</h1>
+          <p className="text-sm text-brand-gray">Acompanhe leads e pacientes por estágio</p>
         </div>
         <div className="relative w-full sm:w-72">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -142,7 +142,7 @@ export default function Contatos() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-brand-primary" />
         </div>
       ) : (
         <DragDropContext onDragEnd={handleDragEnd}>

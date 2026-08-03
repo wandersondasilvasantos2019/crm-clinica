@@ -5,12 +5,15 @@ import {
   CalendarDays,
   BarChart3,
   Settings,
+  Plug,
+  Headset,
   LogOut,
-  Stethoscope,
+  ChevronDown,
   X,
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useAuth } from '@/context/AuthContext'
+import LogoWsantos from '@/components/LogoWsantos'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -18,6 +21,8 @@ const NAV_ITEMS = [
   { to: '/agendamentos', label: 'Agendamentos', icon: CalendarDays },
   { to: '/estatisticas', label: 'Estatísticas', icon: BarChart3 },
   { to: '/configuracoes', label: 'Configurações', icon: Settings },
+  { to: '/integracoes', label: 'Integrações', icon: Plug },
+  { to: '/atendimentos', label: 'Atendimentos', icon: Headset },
 ]
 
 interface SidebarProps {
@@ -40,19 +45,17 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-gray-200 bg-white transition-transform duration-200 lg:static lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-brand-dark transition-transform duration-200 lg:static lg:translate-x-0',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <div className="flex items-center justify-between gap-2 px-5 py-5">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500">
-              <Stethoscope className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-semibold text-gray-900">CRM Clínica</span>
+          <div className="flex items-center gap-2.5">
+            <LogoWsantos size="sm" showText={false} onDarkBackground textClassName="text-white" />
+            <span className="text-base font-bold leading-none text-white">wsantos</span>
           </div>
           <button
-            className="rounded-md p-1 text-gray-500 hover:bg-gray-50 lg:hidden"
+            className="rounded-md p-1 text-white/70 hover:bg-white/10 lg:hidden"
             onClick={onClose}
             aria-label="Fechar menu"
           >
@@ -71,8 +74,8 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                 clsx(
                   'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition',
                   isActive
-                    ? 'bg-emerald-50 text-emerald-700'
-                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-brand-primary/15 text-brand-secondary'
+                    : 'text-white/60 hover:bg-white/5 hover:text-white'
                 )
               }
             >
@@ -82,13 +85,21 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="border-t border-gray-200 px-3 py-4">
-          {user?.email && (
-            <p className="mb-2 truncate px-3 text-xs text-gray-400">{user.email}</p>
-          )}
+        <div className="border-t border-white/10 px-3 py-4">
+          <div className="flex items-center gap-3 rounded-xl px-3 py-2.5" title={user?.email ?? undefined}>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary/20 text-sm font-semibold text-brand-secondary">
+              {(user?.email ?? 'A').slice(0, 1).toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-white">Admin</p>
+              <p className="truncate text-xs text-white/50">Administrador</p>
+            </div>
+            <ChevronDown className="h-4 w-4 shrink-0 text-white/40" />
+          </div>
+
           <button
             onClick={signOut}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-500 transition hover:bg-red-50 hover:text-red-600"
+            className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/60 transition hover:bg-red-500/10 hover:text-red-400"
           >
             <LogOut className="h-4 w-4" />
             Sair

@@ -35,7 +35,7 @@ export default function KanbanColumn({
             ref={provided.innerRef}
             {...provided.droppableProps}
             className={`flex min-h-[120px] flex-1 flex-col gap-2 overflow-y-auto p-2 transition ${
-              snapshot.isDraggingOver ? 'bg-emerald-500/5' : ''
+              snapshot.isDraggingOver ? 'bg-brand-primary/5' : ''
             }`}
           >
             {leads.map((lead, index) => (

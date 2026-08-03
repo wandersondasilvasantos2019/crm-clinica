@@ -18,8 +18,8 @@ export default function LeadCard({ lead, index, onClick }: LeadCardProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           onClick={onClick}
-          className={`cursor-pointer rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition hover:border-emerald-500/60 ${
-            snapshot.isDragging ? 'ring-2 ring-emerald-500' : ''
+          className={`cursor-pointer rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition hover:border-brand-primary/60 ${
+            snapshot.isDragging ? 'ring-2 ring-brand-primary' : ''
           }`}
         >
           <p className="truncate text-sm font-medium text-gray-900">

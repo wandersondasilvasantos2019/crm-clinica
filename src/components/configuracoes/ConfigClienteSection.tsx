@@ -110,7 +110,7 @@ export default function ConfigClienteSection() {
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Salvar alterações
           </button>
-          {saved && <span className="text-sm text-emerald-400">Salvo com sucesso.</span>}
+          {saved && <span className="text-sm text-brand-primary">Salvo com sucesso.</span>}
         </div>
       </form>
     </section>

@@ -31,15 +31,15 @@
   }
 
   .input {
-    @apply w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-1 focus:ring-emerald-500;
+    @apply w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-brand-primary focus:bg-white focus:ring-1 focus:ring-brand-primary;
   }
 
   .label {
-    @apply mb-1.5 block text-xs font-medium text-gray-500;
+    @apply mb-1.5 block text-xs font-medium text-brand-gray;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-brand-secondary disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
@@ -63,7 +63,7 @@
   background: #f9fafb;
 }
 .rbc-today {
-  background: rgba(16, 185, 129, 0.06);
+  background: rgba(14, 165, 122, 0.06);
 }
 .rbc-header,
 .rbc-time-header-content,
@@ -90,12 +90,12 @@
   color: #111827;
 }
 .rbc-toolbar button.rbc-active {
-  background: #10b981;
+  background: #0ea57a;
   color: #fff;
-  border-color: #10b981;
+  border-color: #0ea57a;
 }
 .rbc-toolbar button.rbc-active:hover {
-  background: #059669;
+  background: #13c296;
   color: #fff;
 }
 .rbc-toolbar-label {
@@ -106,7 +106,7 @@
   border: none;
 }
 .rbc-slot-selection {
-  background: rgba(16, 185, 129, 0.25);
+  background: rgba(14, 165, 122, 0.25);
 }
 .rbc-current-time-indicator {
   background-color: #f43f5e;

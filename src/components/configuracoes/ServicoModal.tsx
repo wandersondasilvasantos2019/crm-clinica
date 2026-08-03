@@ -126,7 +126,7 @@ export default function ServicoModal({ open, onClose, onSaved, instanceId, servi
             type="checkbox"
             checked={ativo}
             onChange={(e) => setAtivo(e.target.checked)}
-            className="h-4 w-4 rounded border-gray-200 bg-gray-50 text-emerald-600"
+            className="h-4 w-4 rounded border-gray-200 bg-gray-50 text-brand-primary"
           />
           Serviço ativo
         </label>

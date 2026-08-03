@@ -176,15 +176,15 @@ export default function AgendarPublico() {
 
   if (clinicLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+      <div className="flex min-h-screen items-center justify-center bg-brand-light">
+        <Loader2 className="h-6 w-6 animate-spin text-brand-gray" />
       </div>
     )
   }
 
   if (clinicError || !clinic) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-gray-50 px-4 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-brand-light px-4 text-center">
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
           <AlertTriangle className="h-7 w-7 text-red-500" />
         </div>

@@ -54,7 +54,7 @@ export default function ServicosSection({ instanceId }: { instanceId: string }) 
 
       {loading ? (
         <div className="flex justify-center py-10">
-          <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+          <Loader2 className="h-5 w-5 animate-spin text-brand-primary" />
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -84,7 +84,7 @@ export default function ServicosSection({ instanceId }: { instanceId: string }) 
                     <td className="px-3 py-2.5">
                       <span
                         className={`badge ${
-                          s.ativo ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'
+                          s.ativo ? 'bg-brand-secondary/10 text-brand-primary' : 'bg-gray-100 text-gray-500'
                         }`}
                       >
                         {s.ativo ? 'Ativo' : 'Inativo'}

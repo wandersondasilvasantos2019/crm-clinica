@@ -7,13 +7,13 @@ interface PublicShellProps {
   children: ReactNode
 }
 
-const DEFAULT_PRIMARY = '#10b981'
+const DEFAULT_PRIMARY = '#0EA57A'
 
 export default function PublicShell({ nomeEmpresa, logoUrl, corPrimaria, children }: PublicShellProps) {
   const style = { '--color-primary': corPrimaria || DEFAULT_PRIMARY } as CSSProperties
 
   return (
-    <div style={style} className="min-h-screen bg-gray-50">
+    <div style={style} className="min-h-screen bg-brand-light">
       <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col px-4 py-6 sm:py-10">
         {(nomeEmpresa || logoUrl) && (
           <header className="mb-6 flex flex-col items-center gap-2 text-center">

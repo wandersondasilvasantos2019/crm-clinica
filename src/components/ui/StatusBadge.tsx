@@ -6,12 +6,12 @@ const LEAD_COLORS: Record<LeadStatus, string> = {
   novo_lead: 'bg-sky-100 text-sky-700',
   em_atendimento: 'bg-amber-100 text-amber-700',
   agendado: 'bg-violet-100 text-violet-700',
-  compareceu: 'bg-emerald-100 text-emerald-800',
+  compareceu: 'bg-brand-secondary/10 text-brand-primary',
   perdido: 'bg-rose-100 text-rose-700',
 }
 
 const AGENDAMENTO_COLORS: Record<AgendamentoStatus, string> = {
-  confirmado: 'bg-emerald-100 text-emerald-800',
+  confirmado: 'bg-brand-secondary/10 text-brand-primary',
   cancelado: 'bg-rose-100 text-rose-700',
   realizado: 'bg-sky-100 text-sky-700',
 }

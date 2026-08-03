@@ -55,7 +55,7 @@ export default function ProfissionaisSection({ instanceId }: { instanceId: strin
 
       {loading ? (
         <div className="flex justify-center py-10">
-          <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+          <Loader2 className="h-5 w-5 animate-spin text-brand-primary" />
         </div>
       ) : profissionais.length === 0 ? (
         <p className="py-6 text-center text-sm text-gray-400">Nenhum profissional cadastrado.</p>

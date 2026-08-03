@@ -7,13 +7,13 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-brand-light">
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-gray-200 bg-gray-50/80 px-4 py-3 backdrop-blur lg:justify-end">
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-gray-100 bg-brand-light/80 px-4 py-3 backdrop-blur lg:justify-end">
           <button
-            className="rounded-md p-2 text-gray-700 hover:bg-gray-50 lg:hidden"
+            className="rounded-md p-2 text-gray-700 hover:bg-white lg:hidden"
             onClick={() => setMobileOpen(true)}
             aria-label="Abrir menu"
           >

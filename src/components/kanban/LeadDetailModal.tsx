@@ -64,7 +64,7 @@ export default function LeadDetailModal({ lead, onClose }: LeadDetailModalProps)
 
           {loading ? (
             <div className="flex justify-center py-10">
-              <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+              <Loader2 className="h-5 w-5 animate-spin text-brand-primary" />
             </div>
           ) : (
             <>
@@ -117,7 +117,7 @@ export default function LeadDetailModal({ lead, onClose }: LeadDetailModalProps)
                               'max-w-[80%] rounded-lg px-3 py-2 text-sm',
                               isPaciente
                                 ? 'border border-gray-200 bg-white text-gray-900'
-                                : 'bg-emerald-100 text-emerald-800'
+                                : 'bg-brand-secondary/10 text-brand-primary'
                             )}
                           >
                             <p>{c.mensagem}</p>

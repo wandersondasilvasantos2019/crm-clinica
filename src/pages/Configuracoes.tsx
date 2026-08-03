@@ -13,8 +13,8 @@ export default function Configuracoes() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Configurações</h1>
-        <p className="text-sm text-gray-400">Dados da clínica, serviços e profissionais</p>
+        <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
+        <p className="text-sm text-brand-gray">Dados da clínica, serviços e profissionais</p>
       </div>
 
       <ConfigClienteSection />

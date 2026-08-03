@@ -15,7 +15,7 @@ const localizer = dateFnsLocalizer({
 })
 
 const STATUS_COLOR: Record<string, string> = {
-  confirmado: '#10b981',
+  confirmado: '#0EA57A',
   cancelado: '#f43f5e',
   realizado: '#0ea5e9',
 }
@@ -65,7 +65,7 @@ export default function CalendarView({
         onSelectEvent={(event: CalendarEvent) => onSelectEvent(event.resource)}
         eventPropGetter={(event: CalendarEvent) => ({
           style: {
-            backgroundColor: STATUS_COLOR[event.resource.status] ?? '#10b981',
+            backgroundColor: STATUS_COLOR[event.resource.status] ?? '#0EA57A',
             borderRadius: 6,
             border: 'none',
             fontSize: 12,

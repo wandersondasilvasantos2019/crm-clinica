@@ -76,7 +76,7 @@ export default function HorariosModal({ open, onClose, profissional }: HorariosM
       <div className="space-y-5">
         {loading ? (
           <div className="flex justify-center py-6">
-            <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+            <Loader2 className="h-5 w-5 animate-spin text-brand-primary" />
           </div>
         ) : (
           <ul className="space-y-2">

@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Stethoscope, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
+import LogoWsantos from '@/components/LogoWsantos'
 
 export default function Login() {
   const { session, loading, signIn } = useAuth()
@@ -24,14 +25,14 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-brand-light px-4">
       <div className="w-full max-w-sm">
-        <div className="mb-8 flex flex-col items-center gap-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600">
-            <Stethoscope className="h-6 w-6 text-white" />
+        <div className="mb-8 flex flex-col items-center gap-3">
+          <LogoWsantos size="lg" showText={false} onDarkBackground={false} />
+          <div className="text-center">
+            <h1 className="text-xl font-bold text-gray-900">wsantos</h1>
+            <p className="text-sm text-brand-gray">Recepcionista Inteligente para Clínicas</p>
           </div>
-          <h1 className="text-xl font-semibold text-gray-900">CRM Clínica</h1>
-          <p className="text-sm text-gray-400">Entre com sua conta para continuar</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card space-y-4">
