@@ -5,7 +5,6 @@ import {
   CalendarDays,
   BarChart3,
   Settings,
-  Plug,
   Headset,
   LogOut,
   ChevronDown,
@@ -21,7 +20,6 @@ const NAV_ITEMS = [
   { to: '/agendamentos', label: 'Agendamentos', icon: CalendarDays },
   { to: '/estatisticas', label: 'Estatísticas', icon: BarChart3 },
   { to: '/configuracoes', label: 'Configurações', icon: Settings },
-  { to: '/integracoes', label: 'Integrações', icon: Plug },
   { to: '/atendimentos', label: 'Atendimentos', icon: Headset },
 ]
 

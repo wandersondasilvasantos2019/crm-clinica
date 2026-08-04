@@ -106,7 +106,7 @@ export default function LeadDetailModal({ lead, onClose }: LeadDetailModalProps)
                 ) : (
                   <div className="max-h-80 space-y-2 overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-3">
                     {conversas.map((c) => {
-                      const isPaciente = c.role === 'user'
+                      const isPaciente = c.role === 'paciente'
                       return (
                         <div
                           key={c.id}

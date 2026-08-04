@@ -7,7 +7,6 @@ import Contatos from '@/pages/Contatos'
 import Agendamentos from '@/pages/Agendamentos'
 import Estatisticas from '@/pages/Estatisticas'
 import Configuracoes from '@/pages/Configuracoes'
-import Integracoes from '@/pages/Integracoes'
 import Atendimentos from '@/pages/Atendimentos'
 import AgendarPublico from '@/pages/public/AgendarPublico'
 
@@ -62,16 +61,6 @@ export default function App() {
           <ProtectedRoute>
             <Layout>
               <Configuracoes />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/integracoes"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Integracoes />
             </Layout>
           </ProtectedRoute>
         }

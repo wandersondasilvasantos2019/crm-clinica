@@ -1,6 +1,6 @@
 export type LeadStatus = 'novo_lead' | 'em_atendimento' | 'agendado' | 'compareceu' | 'perdido'
 export type AgendamentoStatus = 'confirmado' | 'cancelado' | 'realizado'
-export type ConversaRole = 'user' | 'assistant' | 'system' | 'human'
+export type ConversaRole = 'paciente' | 'ia'
 
 export interface ConfigCliente {
   instance_id: string
@@ -62,11 +62,12 @@ export interface Agendamento {
 }
 
 export interface Conversa {
-  id: string
+  id: number
   instance_id: string
   telefone: string
   role: ConversaRole
   mensagem: string
+  tipo: string
   criado_em: string
 }
 
