@@ -12,7 +12,7 @@ export default function Login() {
   const [submitting, setSubmitting] = useState(false)
 
   if (!loading && session) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/app" replace />
   }
 
   async function handleSubmit(e: FormEvent) {

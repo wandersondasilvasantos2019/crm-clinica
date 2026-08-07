@@ -15,12 +15,12 @@ import { useAuth } from '@/context/AuthContext'
 import LogoWsantos from '@/components/LogoWsantos'
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/contatos', label: 'Contatos', icon: Users },
-  { to: '/agendamentos', label: 'Agendamentos', icon: CalendarDays },
-  { to: '/estatisticas', label: 'Estatísticas', icon: BarChart3 },
-  { to: '/configuracoes', label: 'Configurações', icon: Settings },
-  { to: '/atendimentos', label: 'Atendimentos', icon: Headset },
+  { to: '/app', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/app/contatos', label: 'Contatos', icon: Users },
+  { to: '/app/agendamentos', label: 'Agendamentos', icon: CalendarDays },
+  { to: '/app/estatisticas', label: 'Estatísticas', icon: BarChart3 },
+  { to: '/app/configuracoes', label: 'Configurações', icon: Settings },
+  { to: '/app/atendimentos', label: 'Atendimentos', icon: Headset },
 ]
 
 interface SidebarProps {

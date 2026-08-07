@@ -482,7 +482,7 @@ export default function Dashboard() {
                 </ul>
               )}
               <Link
-                to="/atendimentos"
+                to="/app/atendimentos"
                 className="mt-4 inline-block text-xs font-medium text-brand-primary hover:underline"
               >
                 Ver todos →
@@ -510,7 +510,7 @@ export default function Dashboard() {
                 </ul>
               )}
               <Link
-                to="/agendamentos"
+                to="/app/agendamentos"
                 className="mt-4 inline-block text-xs font-medium text-brand-primary hover:underline"
               >
                 Ver todos →

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import Layout from '@/components/layout/Layout'
 import Login from '@/pages/Login'
@@ -9,14 +9,17 @@ import Estatisticas from '@/pages/Estatisticas'
 import Configuracoes from '@/pages/Configuracoes'
 import Atendimentos from '@/pages/Atendimentos'
 import AgendarPublico from '@/pages/public/AgendarPublico'
+import Landing from '@/pages/public/Landing'
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/landing" element={<Navigate to="/" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/agendar/:slug" element={<AgendarPublico />} />
       <Route
-        path="/"
+        path="/app"
         element={
           <ProtectedRoute>
             <Layout>
@@ -26,7 +29,7 @@ export default function App() {
         }
       />
       <Route
-        path="/contatos"
+        path="/app/contatos"
         element={
           <ProtectedRoute>
             <Layout>
@@ -36,7 +39,7 @@ export default function App() {
         }
       />
       <Route
-        path="/agendamentos"
+        path="/app/agendamentos"
         element={
           <ProtectedRoute>
             <Layout>
@@ -46,7 +49,7 @@ export default function App() {
         }
       />
       <Route
-        path="/estatisticas"
+        path="/app/estatisticas"
         element={
           <ProtectedRoute>
             <Layout>
@@ -56,7 +59,7 @@ export default function App() {
         }
       />
       <Route
-        path="/configuracoes"
+        path="/app/configuracoes"
         element={
           <ProtectedRoute>
             <Layout>
@@ -66,7 +69,7 @@ export default function App() {
         }
       />
       <Route
-        path="/atendimentos"
+        path="/app/atendimentos"
         element={
           <ProtectedRoute>
             <Layout>
