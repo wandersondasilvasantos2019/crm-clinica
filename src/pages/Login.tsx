@@ -31,7 +31,7 @@ export default function Login() {
           <LogoWsantos size="lg" showText={false} onDarkBackground={false} />
           <div className="text-center">
             <h1 className="text-xl font-bold text-gray-900">wsantos</h1>
-            <p className="text-sm text-brand-gray">Recepcionista Inteligente para Clínicas</p>
+            <p className="text-sm text-brand-gray">Secretária Inteligente</p>
           </div>
         </div>
 
