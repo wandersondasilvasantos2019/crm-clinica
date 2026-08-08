@@ -175,7 +175,7 @@ export default function Landing() {
           </p>
           <div className="mt-8 flex flex-col items-center gap-3">
             <CTAButton />
-            <span className="text-xs text-white/60">Teste uma conversa real com a IA.</span>
+            <span className="text-xs text-white/60">Teste uma conversa real com a secretária.</span>
           </div>
         </div>
       </section>
@@ -260,7 +260,7 @@ export default function Landing() {
             Veja sua secretária trabalhando
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-brand-gray">
-            Não é apenas uma IA conversando. Ela ajuda a organizar o atendimento e os agendamentos
+            Mais do que responder mensagens, ela ajuda a organizar o atendimento e os agendamentos
             do seu negócio.
           </p>
         </div>
@@ -310,22 +310,6 @@ export default function Landing() {
           <div className="mt-6 flex justify-center">
             <CTAButton />
           </div>
-        </div>
-      </section>
-
-      {/* GARANTIA */}
-      <section className="bg-white px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold text-brand-dark sm:text-3xl">
-            Você não precisa confiar apenas no que estamos dizendo.
-          </h2>
-          <p className="mt-4 text-brand-gray">
-            Você pode conversar com a secretária e ver a solução funcionando antes de decidir.
-          </p>
-          <p className="mt-3 text-brand-gray">
-            A implantação é personalizada para o seu negócio e os primeiros ajustes fazem parte do
-            processo.
-          </p>
         </div>
       </section>
 
