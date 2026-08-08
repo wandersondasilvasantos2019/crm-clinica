@@ -32,7 +32,7 @@ export default function ProductCarousel({ slides }: { slides: Slide[] }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
         <div className="flex items-center gap-1.5 border-b border-gray-100 bg-gray-50 px-4 py-2.5">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
