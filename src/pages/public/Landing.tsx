@@ -267,7 +267,13 @@ export default function Landing() {
         <div className="mt-10">
           <ProductCarousel slides={PRODUCT_SLIDES} />
         </div>
-        <div className="mx-auto mt-12 max-w-2xl text-center">
+        <div className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-3 text-center">
+          <p className="text-sm font-medium text-brand-dark">
+            Veja funcionando antes de contratar.
+          </p>
+          <CTAButton />
+        </div>
+        <div className="mx-auto mt-14 max-w-2xl text-center">
           <h3 className="text-xl font-bold text-brand-dark sm:text-2xl">
             Tenha sua operação organizada em um só lugar
           </h3>
@@ -294,21 +300,6 @@ export default function Landing() {
                 <p className="mt-1.5 text-sm text-gray-600">{text}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* VEJA FUNCIONANDO ANTES DE CONTRATAR */}
-      <section className="border-t border-gray-100 bg-brand-light px-4 py-16 text-center sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="text-xl font-bold text-brand-dark sm:text-2xl">
-            Veja funcionando antes de contratar.
-          </h2>
-          <p className="mt-3 text-brand-gray">
-            Converse com a secretária e veja na prática como ela pode funcionar no seu negócio.
-          </p>
-          <div className="mt-6 flex justify-center">
-            <CTAButton />
           </div>
         </div>
       </section>
