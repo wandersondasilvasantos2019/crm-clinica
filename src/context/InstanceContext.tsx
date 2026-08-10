@@ -16,7 +16,7 @@ const InstanceContext = createContext<InstanceContextValue | undefined>(undefine
 const STORAGE_KEY = 'crm.instanceId'
 
 export function InstanceProvider({ children }: { children: ReactNode }) {
-  const { session } = useAuth()
+  const { session, role, ownInstanceId, roleLoading } = useAuth()
   const [instances, setInstances] = useState<ConfigCliente[]>([])
   const [instanceId, setInstanceIdState] = useState<string | null>(
     () => localStorage.getItem(STORAGE_KEY)
@@ -25,6 +25,21 @@ export function InstanceProvider({ children }: { children: ReactNode }) {
 
   async function refreshInstances() {
     setLoading(true)
+
+    if (role === 'cliente') {
+      const { data, error } = await supabase
+        .from('config_cliente')
+        .select('*')
+        .eq('instance_id', ownInstanceId)
+
+      if (!error && data) {
+        setInstances(data)
+        setInstanceIdState(ownInstanceId)
+      }
+      setLoading(false)
+      return
+    }
+
     const { data, error } = await supabase
       .from('config_cliente')
       .select('*')
@@ -42,13 +57,16 @@ export function InstanceProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (session) {
+    if (session && !roleLoading) {
       refreshInstances()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session])
+  }, [session, role, ownInstanceId, roleLoading])
 
   function setInstanceId(id: string) {
+    // Cliente fica preso ao proprio tenant — sem seletor, sem-op de seguranca
+    // caso algo tente trocar o instance_id mesmo assim.
+    if (role === 'cliente') return
     setInstanceIdState(id)
     localStorage.setItem(STORAGE_KEY, id)
   }

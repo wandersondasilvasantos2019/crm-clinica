@@ -8,6 +8,7 @@ import Agendamentos from '@/pages/Agendamentos'
 import Estatisticas from '@/pages/Estatisticas'
 import Configuracoes from '@/pages/Configuracoes'
 import Atendimentos from '@/pages/Atendimentos'
+import ClienteNovo from '@/pages/ClienteNovo'
 import AgendarPublico from '@/pages/public/AgendarPublico'
 import Landing from '@/pages/public/Landing'
 
@@ -74,6 +75,16 @@ export default function App() {
           <ProtectedRoute>
             <Layout>
               <Atendimentos />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/app/clientes/novo"
+        element={
+          <ProtectedRoute adminOnly>
+            <Layout>
+              <ClienteNovo />
             </Layout>
           </ProtectedRoute>
         }

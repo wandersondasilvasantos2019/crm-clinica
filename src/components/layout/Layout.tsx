@@ -1,10 +1,12 @@
 import { useState, type ReactNode } from 'react'
 import { Menu } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
 import Sidebar from './Sidebar'
 import InstanceSwitcher from './InstanceSwitcher'
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { role } = useAuth()
 
   return (
     <div className="flex min-h-screen bg-brand-light">
@@ -19,7 +21,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <InstanceSwitcher />
+          {role === 'admin' && <InstanceSwitcher />}
         </header>
 
         <main className="flex-1 p-4 sm:p-6">{children}</main>

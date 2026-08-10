@@ -2,6 +2,7 @@ import { useInstance } from '@/context/InstanceContext'
 import ConfigClienteSection from '@/components/configuracoes/ConfigClienteSection'
 import ServicosSection from '@/components/configuracoes/ServicosSection'
 import ProfissionaisSection from '@/components/configuracoes/ProfissionaisSection'
+import ConectarWhatsappSection from '@/components/configuracoes/ConectarWhatsappSection'
 
 export default function Configuracoes() {
   const { instanceId } = useInstance()
@@ -18,6 +19,7 @@ export default function Configuracoes() {
       </div>
 
       <ConfigClienteSection />
+      <ConectarWhatsappSection />
       <ServicosSection instanceId={instanceId} />
       <ProfissionaisSection instanceId={instanceId} />
     </div>

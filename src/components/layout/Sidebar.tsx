@@ -6,6 +6,7 @@ import {
   BarChart3,
   Settings,
   Headset,
+  UserPlus,
   LogOut,
   ChevronDown,
   X,
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { to: '/app/estatisticas', label: 'Estatísticas', icon: BarChart3 },
   { to: '/app/configuracoes', label: 'Configurações', icon: Settings },
   { to: '/app/atendimentos', label: 'Atendimentos', icon: Headset },
+  { to: '/app/clientes/novo', label: 'Cadastrar Cliente', icon: UserPlus, adminOnly: true },
 ]
 
 interface SidebarProps {
@@ -29,7 +31,8 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
-  const { signOut, user } = useAuth()
+  const { signOut, user, role } = useAuth()
+  const visibleNavItems = NAV_ITEMS.filter((item) => !item.adminOnly || role === 'admin')
 
   return (
     <>
@@ -62,7 +65,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-2">
-          {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+          {visibleNavItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
               to={to}
@@ -89,8 +92,10 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               {(user?.email ?? 'A').slice(0, 1).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-white">Admin</p>
-              <p className="truncate text-xs text-white/50">Administrador</p>
+              <p className="truncate text-sm font-medium text-white">{user?.email ?? 'Usuário'}</p>
+              <p className="truncate text-xs text-white/50">
+                {role === 'admin' ? 'Administrador' : 'Cliente'}
+              </p>
             </div>
             <ChevronDown className="h-4 w-4 shrink-0 text-white/40" />
           </div>
