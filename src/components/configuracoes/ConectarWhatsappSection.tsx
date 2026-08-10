@@ -4,22 +4,24 @@ import { useInstance } from '@/context/InstanceContext'
 
 const CRIAR_SESSAO_URL = 'https://n8n.wsantos.online/webhook/waha-criar-sessao'
 const STATUS_SESSAO_URL = 'https://n8n.wsantos.online/webhook/waha-status-sessao'
+const ATUALIZAR_QR_URL = 'https://n8n.wsantos.online/webhook/waha-atualizar-qr'
 const DESCONECTAR_URL = 'https://n8n.wsantos.online/webhook/waha-desconectar'
 
 const POLL_INTERVAL_MS = 3000
+const QR_REFRESH_SECONDS = 20
 
 type ConnectionState = 'checking' | 'disconnected' | 'loading_qr' | 'waiting_scan' | 'connected'
 
-async function checkStatus(instanceId: string): Promise<boolean> {
+async function fetchStatus(instanceId: string): Promise<string | null> {
   try {
     const res = await fetch(
       `${STATUS_SESSAO_URL}?instance_id=${encodeURIComponent(instanceId)}`
     )
-    if (!res.ok) return false
+    if (!res.ok) return null
     const data = await res.json()
-    return data?.status === 'WORKING'
+    return data?.status ?? null
   } catch {
-    return false
+    return null
   }
 }
 
@@ -27,15 +29,24 @@ export default function ConectarWhatsappSection() {
   const { instanceId } = useInstance()
   const [state, setState] = useState<ConnectionState>('checking')
   const [qrUrl, setQrUrl] = useState<string | null>(null)
+  const [qrSecondsLeft, setQrSecondsLeft] = useState(QR_REFRESH_SECONDS)
   const [error, setError] = useState<string | null>(null)
   const [disconnecting, setDisconnecting] = useState(false)
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const qrUrlRef = useRef<string | null>(null)
 
   function clearPoll() {
     if (pollRef.current) {
       clearInterval(pollRef.current)
       pollRef.current = null
+    }
+  }
+
+  function clearCountdown() {
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current)
+      countdownRef.current = null
     }
   }
 
@@ -46,11 +57,29 @@ export default function ConectarWhatsappSection() {
     }
   }
 
+  async function refreshQr(id: string) {
+    try {
+      const res = await fetch(
+        `${ATUALIZAR_QR_URL}?instance_id=${encodeURIComponent(id)}`
+      )
+      if (!res.ok) return
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      revokeQrUrl()
+      qrUrlRef.current = url
+      setQrUrl(url)
+    } catch {
+      // silencioso — a proxima virada do contador tenta de novo
+    }
+  }
+
   useEffect(() => {
     // Troca de clinica (admin) ou primeira carga: limpa tudo e reavalia do zero.
     clearPoll()
+    clearCountdown()
     revokeQrUrl()
     setQrUrl(null)
+    setQrSecondsLeft(QR_REFRESH_SECONDS)
     setError(null)
 
     if (!instanceId) {
@@ -61,14 +90,15 @@ export default function ConectarWhatsappSection() {
     let cancelled = false
     setState('checking')
 
-    checkStatus(instanceId).then((working) => {
+    fetchStatus(instanceId).then((status) => {
       if (cancelled) return
-      setState(working ? 'connected' : 'disconnected')
+      setState(status === 'WORKING' ? 'connected' : 'disconnected')
     })
 
     return () => {
       cancelled = true
       clearPoll()
+      clearCountdown()
       revokeQrUrl()
     }
   }, [instanceId])
@@ -91,18 +121,40 @@ export default function ConectarWhatsappSection() {
       revokeQrUrl()
       qrUrlRef.current = url
       setQrUrl(url)
+      setQrSecondsLeft(QR_REFRESH_SECONDS)
       setState('waiting_scan')
 
       clearPoll()
       pollRef.current = setInterval(async () => {
-        const working = await checkStatus(instanceId)
-        if (working) {
+        const status = await fetchStatus(instanceId)
+        if (status === 'WORKING') {
           clearPoll()
+          clearCountdown()
           revokeQrUrl()
           setQrUrl(null)
           setState('connected')
+        } else if (status === 'FAILED' || status === 'STOPPED') {
+          clearPoll()
+          clearCountdown()
+          revokeQrUrl()
+          setQrUrl(null)
+          setState('disconnected')
+          setError('A sessão do WhatsApp falhou ou foi interrompida. Tente conectar novamente.')
         }
       }, POLL_INTERVAL_MS)
+
+      // O WAHA troca o QR internamente a cada ~20s enquanto ninguem escaneia
+      // — sem isso, a imagem exibida fica velha e o scan falha em silencio.
+      clearCountdown()
+      countdownRef.current = setInterval(() => {
+        setQrSecondsLeft((prev) => {
+          if (prev <= 1) {
+            refreshQr(instanceId)
+            return QR_REFRESH_SECONDS
+          }
+          return prev - 1
+        })
+      }, 1000)
     } catch (err) {
       setState('disconnected')
       setError(err instanceof Error ? err.message : 'Erro ao conectar o WhatsApp.')
@@ -123,6 +175,7 @@ export default function ConectarWhatsappSection() {
       // segue pro estado desconectado mesmo assim
     }
     clearPoll()
+    clearCountdown()
     revokeQrUrl()
     setQrUrl(null)
     setDisconnecting(false)
@@ -192,6 +245,9 @@ export default function ConectarWhatsappSection() {
           />
           <p className="text-sm text-brand-gray">
             Abra o WhatsApp no celular e escaneie o QR Code.
+          </p>
+          <p className="text-xs text-gray-400">
+            Este QR Code atualiza em {qrSecondsLeft}s
           </p>
         </div>
       )}
