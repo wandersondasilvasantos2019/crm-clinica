@@ -50,6 +50,10 @@ using (
 );
 
 -- config_cliente: a "instance_id" da propria tabela e' a chave.
+-- select/insert/update liberados pra admin ou pro dono do tenant; delete
+-- restrito a admin via politica RESTRICTIVE (combina em AND com a
+-- permissiva abaixo — sem ela, a "for all" ja deixaria qualquer cliente
+-- apagar a propria linha, ja que policies permissivas se combinam em OR).
 alter table public.config_cliente enable row level security;
 
 create policy "acesso_por_instance_id"
@@ -57,6 +61,14 @@ on public.config_cliente
 for all
 using (
   public.is_admin() or config_cliente.instance_id = public.my_instance_id()
+);
+
+create policy "delete_somente_admin"
+on public.config_cliente
+as restrictive
+for delete
+using (
+  public.is_admin()
 );
 
 -- servicos, profissionais, agendamentos, leads_pacientes, conversas:

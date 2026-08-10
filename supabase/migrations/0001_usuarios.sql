@@ -27,5 +27,5 @@ comment on table public.usuarios is
 insert into public.usuarios (id, role, instance_id)
 select id, 'admin', null
 from auth.users
-where email = 'SEU_EMAIL_AQUI'
+where email = 'admin@admin.com'
 on conflict (id) do nothing;

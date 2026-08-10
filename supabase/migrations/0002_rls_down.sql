@@ -18,6 +18,7 @@ alter table public.profissionais disable row level security;
 drop policy if exists "acesso_por_instance_id" on public.servicos;
 alter table public.servicos disable row level security;
 
+drop policy if exists "delete_somente_admin" on public.config_cliente;
 drop policy if exists "acesso_por_instance_id" on public.config_cliente;
 alter table public.config_cliente disable row level security;
 
