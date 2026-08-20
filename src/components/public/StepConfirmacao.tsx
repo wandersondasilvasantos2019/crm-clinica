@@ -3,7 +3,7 @@ import { CalendarDays, Clock, Stethoscope, User } from 'lucide-react'
 import { supabasePublic } from '@/lib/supabasePublic'
 import { capitalizeFirst, formatCurrency } from '@/lib/format'
 import { isValidPhoneInput, maskPhoneInput, normalizePhoneForStorage } from '@/lib/phone'
-import { combineDateAndTime, minutesFromDate } from '@/lib/slots'
+import { combineDateAndTime, minutesFromDate, toLocalTimestamp } from '@/lib/slots'
 import PrimaryButton from './PrimaryButton'
 import type { Profissional, Servico } from '@/types/database'
 
@@ -72,8 +72,8 @@ export default function StepConfirmacao({
       .eq('instance_id', instanceId)
       .eq('profissional_id', profissional.id)
       .neq('status', 'cancelado')
-      .gte('data_hora', dayStart.toISOString())
-      .lt('data_hora', dayEnd.toISOString())
+      .gte('data_hora', toLocalTimestamp(dayStart))
+      .lt('data_hora', toLocalTimestamp(dayEnd))
 
     const slotStart = minutesFromDate(dataHora)
     const slotEnd = slotStart + servico.duracao_minutos
@@ -120,7 +120,7 @@ export default function StepConfirmacao({
       lead_id: resolvedLeadId,
       servico_id: servico.id,
       profissional_id: profissional.id,
-      data_hora: dataHora.toISOString(),
+      data_hora: toLocalTimestamp(dataHora),
       status: 'confirmado',
       criado_via: 'cliente_link',
     })

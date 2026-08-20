@@ -75,6 +75,11 @@ export function combineDateAndTime(date: Date, time: string): Date {
   return combined
 }
 
+export function toLocalTimestamp(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+}
+
 export function minutesFromDate(date: Date): number {
   return date.getHours() * 60 + date.getMinutes()
 }

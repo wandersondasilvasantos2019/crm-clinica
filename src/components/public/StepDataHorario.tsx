@@ -8,6 +8,7 @@ import {
   getNext14Days,
   isDayEnabled,
   minutesFromDate,
+  toLocalTimestamp,
   type OcupacaoExistente,
 } from '@/lib/slots'
 import type { HorarioDisponivel } from '@/types/database'
@@ -83,8 +84,8 @@ export default function StepDataHorario({
         .eq('instance_id', instanceId)
         .eq('profissional_id', profissionalId)
         .neq('status', 'cancelado')
-        .gte('data_hora', dayStart.toISOString())
-        .lt('data_hora', dayEnd.toISOString())
+        .gte('data_hora', toLocalTimestamp(dayStart))
+        .lt('data_hora', toLocalTimestamp(dayEnd))
 
       if (cancelled) return
 
