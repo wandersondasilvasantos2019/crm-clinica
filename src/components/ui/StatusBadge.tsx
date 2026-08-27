@@ -13,7 +13,8 @@ const LEAD_COLORS: Record<LeadStatus, string> = {
 const AGENDAMENTO_COLORS: Record<AgendamentoStatus, string> = {
   confirmado: 'bg-brand-secondary/10 text-brand-primary',
   cancelado: 'bg-rose-100 text-rose-700',
-  realizado: 'bg-sky-100 text-sky-700',
+  compareceu: 'bg-sky-100 text-sky-700',
+  faltou: 'bg-gray-200 text-gray-600',
 }
 
 export function LeadStatusBadge({ status }: { status: LeadStatus }) {

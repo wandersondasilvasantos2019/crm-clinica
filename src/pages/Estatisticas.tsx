@@ -84,7 +84,7 @@ export default function Estatisticas() {
         if (a.servico) {
           servicosMap.set(a.servico.nome, (servicosMap.get(a.servico.nome) ?? 0) + 1)
         }
-        if (a.status === 'realizado' && a.servico) {
+        if (a.status === 'compareceu' && a.servico) {
           const mesKey = a.data_hora.slice(0, 7)
           faturamentoMap.set(mesKey, (faturamentoMap.get(mesKey) ?? 0) + Number(a.servico.valor))
         }

@@ -1,5 +1,5 @@
 export type LeadStatus = 'novo_lead' | 'em_atendimento' | 'agendado' | 'compareceu' | 'perdido'
-export type AgendamentoStatus = 'confirmado' | 'cancelado' | 'realizado'
+export type AgendamentoStatus = 'confirmado' | 'cancelado' | 'compareceu' | 'faltou'
 export type ConversaRole = 'paciente' | 'ia'
 export type UsuarioRole = 'admin' | 'cliente'
 
@@ -104,5 +104,6 @@ export const LEAD_STATUS_ORDER: LeadStatus[] = [
 export const AGENDAMENTO_STATUS_LABELS: Record<AgendamentoStatus, string> = {
   confirmado: 'Confirmado',
   cancelado: 'Cancelado',
-  realizado: 'Realizado',
+  compareceu: 'Compareceu',
+  faltou: 'Faltou',
 }

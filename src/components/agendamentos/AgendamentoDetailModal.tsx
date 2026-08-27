@@ -19,7 +19,7 @@ export default function AgendamentoDetailModal({
 }: AgendamentoDetailModalProps) {
   const [submitting, setSubmitting] = useState(false)
 
-  async function updateStatus(status: 'cancelado' | 'realizado') {
+  async function updateStatus(status: 'cancelado' | 'compareceu') {
     if (!agendamento) return
     setSubmitting(true)
     const { error } = await supabase
@@ -84,7 +84,7 @@ export default function AgendamentoDetailModal({
               <button
                 className="btn-primary"
                 disabled={submitting}
-                onClick={() => updateStatus('realizado')}
+                onClick={() => updateStatus('compareceu')}
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 Marcar como realizado

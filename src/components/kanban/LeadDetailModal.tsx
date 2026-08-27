@@ -10,7 +10,7 @@ import type { Conversa, LeadPaciente } from '@/types/database'
 interface AgendamentoRow {
   id: string
   data_hora: string
-  status: 'confirmado' | 'cancelado' | 'realizado'
+  status: 'confirmado' | 'cancelado' | 'compareceu' | 'faltou'
   servicos: { nome: string } | null
   profissionais: { nome: string } | null
 }

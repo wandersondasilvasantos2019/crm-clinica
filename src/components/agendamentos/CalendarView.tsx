@@ -17,7 +17,8 @@ const localizer = dateFnsLocalizer({
 const STATUS_COLOR: Record<string, string> = {
   confirmado: '#0EA57A',
   cancelado: '#f43f5e',
-  realizado: '#0ea5e9',
+  compareceu: '#0ea5e9',
+  faltou: '#9ca3af',
 }
 
 interface CalendarEvent {

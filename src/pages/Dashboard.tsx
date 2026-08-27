@@ -155,13 +155,13 @@ export default function Dashboard() {
           .from('agendamentos')
           .select('id, data_hora, status, servicos(valor)')
           .eq('instance_id', instanceId)
-          .in('status', ['confirmado', 'realizado'])
+          .in('status', ['confirmado', 'compareceu'])
           .gte('data_hora', monthStart.toISOString()),
         supabase
           .from('agendamentos')
           .select('id, data_hora, status, servicos(valor)')
           .eq('instance_id', instanceId)
-          .in('status', ['confirmado', 'realizado'])
+          .in('status', ['confirmado', 'compareceu'])
           .gte('data_hora', prevMonthStart.toISOString())
           .lt('data_hora', monthStart.toISOString()),
         supabase
