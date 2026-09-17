@@ -48,7 +48,7 @@ export default function ConfigClienteSection() {
 
   return (
     <section className="card">
-      <h2 className="mb-1 text-base font-semibold text-gray-900">Dados da clínica</h2>
+      <h2 className="mb-1 text-base font-semibold text-gray-900">Dados do negócio</h2>
       <p className="mb-4 text-sm text-gray-400">
         Essas informações são usadas pelo agente de IA no WhatsApp.
       </p>

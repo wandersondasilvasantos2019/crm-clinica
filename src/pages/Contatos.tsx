@@ -119,7 +119,7 @@ export default function Contatos() {
   }
 
   if (!instanceId) {
-    return <p className="text-sm text-gray-400">Selecione uma clínica para visualizar os contatos.</p>
+    return <p className="text-sm text-gray-400">Selecione um negócio para visualizar os contatos.</p>
   }
 
   return (
@@ -127,7 +127,7 @@ export default function Contatos() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Contatos</h1>
-          <p className="text-sm text-brand-gray">Acompanhe leads e pacientes por estágio</p>
+          <p className="text-sm text-brand-gray">Acompanhe seus contatos por estágio</p>
         </div>
         <div className="relative w-full sm:w-72">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />

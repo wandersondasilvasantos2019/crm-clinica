@@ -38,7 +38,7 @@ interface ChartPoint {
 interface AgendamentoUpcoming {
   id: string
   data_hora: string
-  paciente: string
+  contato: string
   servico: string
 }
 
@@ -226,7 +226,7 @@ export default function Dashboard() {
       const proximosList: AgendamentoUpcoming[] = (proximosRes.data ?? []).map((row: any) => ({
         id: row.id,
         data_hora: row.data_hora,
-        paciente: row.leads_pacientes?.nome ?? 'Sem nome',
+        contato: row.leads_pacientes?.nome ?? 'Sem nome',
         servico: row.servicos?.nome ?? '—',
       }))
 
@@ -323,14 +323,14 @@ export default function Dashboard() {
   )
 
   if (!instanceId) {
-    return <p className="text-sm text-brand-gray">Selecione uma clínica para visualizar o dashboard.</p>
+    return <p className="text-sm text-brand-gray">Selecione um negócio para visualizar o dashboard.</p>
   }
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-sm text-brand-gray">Visão geral da clínica</p>
+        <p className="text-sm text-brand-gray">Visão geral do negócio</p>
       </div>
 
       {loading ? (
@@ -498,7 +498,7 @@ export default function Dashboard() {
                   {proximos.map((a) => (
                     <li key={a.id} className="flex items-center justify-between text-sm">
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-gray-900">{a.paciente}</p>
+                        <p className="truncate font-medium text-gray-900">{a.contato}</p>
                         <p className="truncate text-xs text-brand-gray">{a.servico}</p>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-1">

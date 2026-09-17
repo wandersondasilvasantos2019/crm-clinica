@@ -9,7 +9,7 @@ export default function InstanceSwitcher() {
       {loading ? (
         <div className="h-9 w-48 animate-pulse rounded-lg bg-white" />
       ) : instances.length === 0 ? (
-        <span className="text-sm text-brand-gray">Nenhuma clínica cadastrada</span>
+        <span className="text-sm text-brand-gray">Nenhum negócio cadastrado</span>
       ) : (
         <div className="relative flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2">
           <Building2 className="h-4 w-4 text-brand-gray" />

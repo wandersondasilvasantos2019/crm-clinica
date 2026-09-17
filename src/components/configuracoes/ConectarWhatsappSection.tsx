@@ -74,7 +74,7 @@ export default function ConectarWhatsappSection() {
   }
 
   useEffect(() => {
-    // Troca de clinica (admin) ou primeira carga: limpa tudo e reavalia do zero.
+    // Troca de negócio (admin) ou primeira carga: limpa tudo e reavalia do zero.
     clearPoll()
     clearCountdown()
     revokeQrUrl()

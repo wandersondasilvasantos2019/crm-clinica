@@ -37,7 +37,7 @@ export default function LeadSelect({ instanceId, value, onChange }: LeadSelectPr
     <div className="space-y-2">
       <input
         className="input"
-        placeholder="Buscar paciente por nome ou telefone"
+        placeholder="Buscar contato por nome ou telefone"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
@@ -49,7 +49,7 @@ export default function LeadSelect({ instanceId, value, onChange }: LeadSelectPr
         size={Math.min(6, Math.max(3, options.length))}
       >
         <option value="" disabled className="bg-gray-50">
-          Selecione um paciente
+          Selecione um contato
         </option>
         {options.map((lead) => (
           <option key={lead.id} value={lead.id} className="bg-gray-50">

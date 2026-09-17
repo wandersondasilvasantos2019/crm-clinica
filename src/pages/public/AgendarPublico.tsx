@@ -190,7 +190,7 @@ export default function AgendarPublico() {
         </div>
         <h1 className="text-lg font-semibold text-gray-900">Link inválido ou expirado</h1>
         <p className="text-sm text-gray-500">
-          Verifique o link recebido ou entre em contato com a clínica para obter um novo.
+          Verifique o link recebido ou entre em contato com o negócio para obter um novo.
         </p>
       </div>
     )

@@ -131,7 +131,7 @@ Deno.serve(async (req) => {
   })
 
   if (configError) {
-    return jsonResponse({ error: `Erro ao criar clinica: ${configError.message}` }, 500)
+    return jsonResponse({ error: `Erro ao criar negócio: ${configError.message}` }, 500)
   }
 
   const tempPassword = generateTempPassword()

@@ -165,7 +165,7 @@ export default function Atendimentos() {
   }, [instanceId])
 
   if (!instanceId) {
-    return <p className="text-sm text-brand-gray">Selecione uma clínica para visualizar os atendimentos.</p>
+    return <p className="text-sm text-brand-gray">Selecione um negócio para visualizar os atendimentos.</p>
   }
 
   return (

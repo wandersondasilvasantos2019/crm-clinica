@@ -38,7 +38,7 @@ export default function ServicosSection({ instanceId }: { instanceId: string }) 
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-base font-semibold text-gray-900">Serviços</h2>
-          <p className="text-sm text-gray-400">Serviços oferecidos pela clínica</p>
+          <p className="text-sm text-gray-400">Serviços oferecidos pelo negócio</p>
         </div>
         <button
           className="btn-primary"

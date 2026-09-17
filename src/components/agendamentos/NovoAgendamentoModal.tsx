@@ -64,7 +64,7 @@ export default function NovoAgendamentoModal({
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (!leadId || !servicoId || !dataHora) {
-      setError('Preencha paciente, serviço e data/hora.')
+      setError('Preencha contato, serviço e data/hora.')
       return
     }
     setSubmitting(true)
@@ -95,7 +95,7 @@ export default function NovoAgendamentoModal({
     <Modal open={open} onClose={onClose} title="Novo agendamento">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label">Paciente</label>
+          <label className="label">Contato</label>
           <LeadSelect instanceId={instanceId} value={leadId} onChange={setLeadId} />
         </div>
 

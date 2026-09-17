@@ -64,7 +64,7 @@ export default function Agendamentos() {
   }
 
   if (!instanceId) {
-    return <p className="text-sm text-gray-400">Selecione uma clínica para visualizar os agendamentos.</p>
+    return <p className="text-sm text-gray-400">Selecione um negócio para visualizar os agendamentos.</p>
   }
 
   return (
@@ -72,7 +72,7 @@ export default function Agendamentos() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Agendamentos</h1>
-          <p className="text-sm text-brand-gray">Gerencie a agenda da clínica</p>
+          <p className="text-sm text-brand-gray">Gerencie a agenda do negócio</p>
         </div>
         <button
           className="btn-primary"

@@ -14,7 +14,7 @@ export default function TableView({ agendamentos, onSelect }: TableViewProps) {
         <thead>
           <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-400">
             <th className="px-4 py-3 font-medium">Data e hora</th>
-            <th className="px-4 py-3 font-medium">Paciente</th>
+            <th className="px-4 py-3 font-medium">Contato</th>
             <th className="px-4 py-3 font-medium">Telefone</th>
             <th className="px-4 py-3 font-medium">Serviço</th>
             <th className="px-4 py-3 font-medium">Profissional</th>

@@ -99,7 +99,7 @@ export default function ClienteNovo() {
 
         <div className="card space-y-3">
           <div>
-            <p className="label">Clínica</p>
+            <p className="label">Negócio</p>
             <p className="text-sm font-medium text-gray-900">{result.instance_id}</p>
           </div>
           <div>
@@ -132,7 +132,7 @@ export default function ClienteNovo() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Cadastrar cliente</h1>
         <p className="text-sm text-brand-gray">
-          Cria a clínica e o login do cliente numa única ação.
+          Cria o negócio e o login do cliente numa única ação.
         </p>
       </div>
 

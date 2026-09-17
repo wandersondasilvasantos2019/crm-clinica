@@ -65,11 +65,11 @@ const SOLUTIONS = [
 ]
 
 const NICHES = [
-  { icon: Stethoscope, label: 'Clínicas e consultórios' },
-  { icon: Sparkles, label: 'Studios de beleza e estética' },
-  { icon: Scissors, label: 'Barbearias e salões' },
+  { icon: Stethoscope, label: 'Clínicas de saúde' },
+  { icon: Sparkles, label: 'Studios de estética' },
+  { icon: Scissors, label: 'Salões de beleza e barbearias' },
+  { icon: Dumbbell, label: 'Studios de pilates e personal trainers' },
   { icon: PawPrint, label: 'Petshops e banho e tosa' },
-  { icon: Dumbbell, label: 'Personal trainers e estúdios' },
   { icon: CalendarClock, label: 'Negócios que trabalham com agendamento' },
 ]
 

@@ -46,7 +46,7 @@ export default function CalendarView({
     const end = new Date(start.getTime() + duracao * 60 * 1000)
     return {
       id: a.id,
-      title: `${a.lead?.nome ?? 'Paciente'} · ${a.servico?.nome ?? ''}`,
+      title: `${a.lead?.nome ?? 'Contato'} · ${a.servico?.nome ?? ''}`,
       start,
       end,
       resource: a,

@@ -129,7 +129,7 @@ export default function Estatisticas() {
   )
 
   if (!instanceId) {
-    return <p className="text-sm text-gray-400">Selecione uma clínica para visualizar as estatísticas.</p>
+    return <p className="text-sm text-gray-400">Selecione um negócio para visualizar as estatísticas.</p>
   }
 
   return (
@@ -137,7 +137,7 @@ export default function Estatisticas() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Estatísticas</h1>
-          <p className="text-sm text-brand-gray">Desempenho da clínica no período selecionado</p>
+          <p className="text-sm text-brand-gray">Desempenho do negócio no período selecionado</p>
         </div>
         <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1">
           {([7, 30, 90] as PeriodoDias[]).map((dias) => (
