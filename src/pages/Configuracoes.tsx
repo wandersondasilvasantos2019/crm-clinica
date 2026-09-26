@@ -6,7 +6,9 @@ import ProfissionaisSection from '@/components/configuracoes/ProfissionaisSectio
 import ConectarWhatsappSection from '@/components/configuracoes/ConectarWhatsappSection'
 
 export default function Configuracoes() {
-  const { instanceId } = useInstance()
+  const { instances, instanceId } = useInstance()
+  const tipoNegocio = instances.find((i) => i.instance_id === instanceId)?.tipo_negocio
+  const isPedidos = tipoNegocio === 'pedidos'
 
   if (!instanceId) {
     return <p className="text-sm text-gray-400">Selecione um negócio para editar as configurações.</p>
@@ -16,14 +18,16 @@ export default function Configuracoes() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
-        <p className="text-sm text-brand-gray">Dados do negócio, serviços e profissionais</p>
+        <p className="text-sm text-brand-gray">
+          {isPedidos ? 'Dados do negócio e integrações' : 'Dados do negócio, serviços e profissionais'}
+        </p>
       </div>
 
       <ConfigClienteSection />
       <TrocarSenhaSection />
       <ConectarWhatsappSection />
-      <ServicosSection instanceId={instanceId} />
-      <ProfissionaisSection instanceId={instanceId} />
+      {!isPedidos && <ServicosSection instanceId={instanceId} />}
+      {!isPedidos && <ProfissionaisSection instanceId={instanceId} />}
     </div>
   )
 }

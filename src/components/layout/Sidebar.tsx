@@ -10,12 +10,24 @@ import {
   LogOut,
   ChevronDown,
   X,
+  ClipboardList,
+  UtensilsCrossed,
+  type LucideIcon,
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useAuth } from '@/context/AuthContext'
+import { useInstance } from '@/context/InstanceContext'
 import LogoWsantos from '@/components/LogoWsantos'
 
-const NAV_ITEMS = [
+interface NavItem {
+  to: string
+  label: string
+  icon: LucideIcon
+  end?: boolean
+  adminOnly?: boolean
+}
+
+const NAV_ITEMS: NavItem[] = [
   { to: '/app', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/app/contatos', label: 'Contatos', icon: Users },
   { to: '/app/agendamentos', label: 'Agendamentos', icon: CalendarDays },
@@ -25,6 +37,17 @@ const NAV_ITEMS = [
   { to: '/app/clientes/novo', label: 'Cadastrar Cliente', icon: UserPlus, adminOnly: true },
 ]
 
+// Vertical de pedidos (restaurante/marmitaria): troca Contatos/Agendamentos por Pedidos/Cardápio.
+const NAV_ITEMS_PEDIDOS: NavItem[] = NAV_ITEMS.flatMap((item) => {
+  if (item.to === '/app/contatos') {
+    return [{ to: '/app/pedidos', label: 'Pedidos', icon: ClipboardList }]
+  }
+  if (item.to === '/app/agendamentos') {
+    return [{ to: '/app/cardapio', label: 'Cardápio', icon: UtensilsCrossed }]
+  }
+  return [item]
+})
+
 interface SidebarProps {
   mobileOpen: boolean
   onClose: () => void
@@ -32,7 +55,10 @@ interface SidebarProps {
 
 export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const { signOut, user, role } = useAuth()
-  const visibleNavItems = NAV_ITEMS.filter((item) => !item.adminOnly || role === 'admin')
+  const { instances, instanceId } = useInstance()
+  const tipoNegocio = instances.find((i) => i.instance_id === instanceId)?.tipo_negocio
+  const navItems = tipoNegocio === 'pedidos' ? NAV_ITEMS_PEDIDOS : NAV_ITEMS
+  const visibleNavItems = navItems.filter((item) => !item.adminOnly || role === 'admin')
 
   return (
     <>

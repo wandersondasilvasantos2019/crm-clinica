@@ -9,6 +9,8 @@ import Estatisticas from '@/pages/Estatisticas'
 import Configuracoes from '@/pages/Configuracoes'
 import Atendimentos from '@/pages/Atendimentos'
 import ClienteNovo from '@/pages/ClienteNovo'
+import Cardapio from '@/pages/Cardapio'
+import Pedidos from '@/pages/Pedidos'
 import AgendarPublico from '@/pages/public/AgendarPublico'
 import Landing from '@/pages/public/Landing'
 
@@ -75,6 +77,26 @@ export default function App() {
           <ProtectedRoute>
             <Layout>
               <Atendimentos />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/app/cardapio"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Cardapio />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/app/pedidos"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Pedidos />
             </Layout>
           </ProtectedRoute>
         }
