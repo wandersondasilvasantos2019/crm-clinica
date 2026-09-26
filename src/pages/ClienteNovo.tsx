@@ -29,6 +29,7 @@ export default function ClienteNovo() {
   const [horarioFuncionamento, setHorarioFuncionamento] = useState('')
   const [tomVoz, setTomVoz] = useState('')
   const [email, setEmail] = useState('')
+  const [tipoNegocio, setTipoNegocio] = useState<'agendamento' | 'pedidos'>('agendamento')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<CriarClienteResult | null>(null)
@@ -56,6 +57,7 @@ export default function ClienteNovo() {
         horario_funcionamento: horarioFuncionamento || undefined,
         tom_voz: tomVoz || undefined,
         email,
+        tipo_negocio: tipoNegocio,
       },
     })
 
@@ -77,6 +79,7 @@ export default function ClienteNovo() {
     setHorarioFuncionamento('')
     setTomVoz('')
     setEmail('')
+    setTipoNegocio('agendamento')
     setCopied(false)
   }
 
@@ -164,6 +167,21 @@ export default function ClienteNovo() {
           <p className="mt-1 text-xs text-gray-400">
             Usado como instance_id — só letras minúsculas, números e hífen.
           </p>
+        </div>
+
+        <div>
+          <label className="label" htmlFor="tipo_negocio">
+            Tipo de negócio
+          </label>
+          <select
+            id="tipo_negocio"
+            className="input"
+            value={tipoNegocio}
+            onChange={(e) => setTipoNegocio(e.target.value as 'agendamento' | 'pedidos')}
+          >
+            <option value="agendamento">Agendamento (clínica, salão, pilates...)</option>
+            <option value="pedidos">Pedidos (restaurante, marmitaria...)</option>
+          </select>
         </div>
 
         <div>
