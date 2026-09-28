@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { supabase } from '@/lib/supabase'
 import Modal from '@/components/ui/Modal'
 import { AgendamentoStatusBadge } from '@/components/ui/StatusBadge'
-import { formatDateTime, formatPhone } from '@/lib/format'
+import { formatDataHoraClinica, formatDateTime, formatPhone } from '@/lib/format'
 import type { Conversa, LeadPaciente } from '@/types/database'
 
 interface AgendamentoRow {
@@ -87,7 +87,7 @@ export default function LeadDetailModal({ lead, onClose }: LeadDetailModalProps)
                             {a.servicos?.nome ?? 'Serviço'}
                           </p>
                           <p className="text-xs text-gray-400">
-                            {formatDateTime(a.data_hora)}
+                            {formatDataHoraClinica(a.data_hora)}
                             {a.profissionais?.nome ? ` · ${a.profissionais.nome}` : ''}
                           </p>
                         </div>

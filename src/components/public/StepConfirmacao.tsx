@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { CalendarDays, Clock, Stethoscope, User } from 'lucide-react'
 import { supabasePublic } from '@/lib/supabasePublic'
-import { capitalizeFirst, formatCurrency } from '@/lib/format'
+import { capitalizeFirst, formatCurrency, parseDataHoraClinica } from '@/lib/format'
 import { isValidPhoneInput, maskPhoneInput, normalizePhoneForStorage } from '@/lib/phone'
 import { combineDateAndTime, minutesFromDate, toLocalTimestamp } from '@/lib/slots'
 import PrimaryButton from './PrimaryButton'
@@ -79,7 +79,7 @@ export default function StepConfirmacao({
     const slotEnd = slotStart + servico.duracao_minutos
 
     const colide = (existentes ?? []).some((row: any) => {
-      const inicio = minutesFromDate(new Date(row.data_hora))
+      const inicio = minutesFromDate(parseDataHoraClinica(row.data_hora))
       const duracao = row.servico?.duracao_minutos ?? 30
       return slotStart < inicio + duracao && inicio < slotEnd
     })

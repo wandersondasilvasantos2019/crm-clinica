@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Loader2, CalendarX } from 'lucide-react'
 import clsx from 'clsx'
 import { supabasePublic } from '@/lib/supabasePublic'
+import { parseDataHoraClinica } from '@/lib/format'
 import {
   buildTimeSlots,
   filterAvailableSlots,
@@ -90,7 +91,7 @@ export default function StepDataHorario({
       if (cancelled) return
 
       const ocupacoes: OcupacaoExistente[] = (data ?? []).map((row: any) => ({
-        inicioMinutos: minutesFromDate(new Date(row.data_hora)),
+        inicioMinutos: minutesFromDate(parseDataHoraClinica(row.data_hora)),
         duracaoMinutos: row.servico?.duracao_minutos ?? 30,
       }))
 

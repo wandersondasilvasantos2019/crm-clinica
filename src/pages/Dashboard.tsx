@@ -12,7 +12,14 @@ import {
 import { UserPlus, CalendarCheck2, TrendingUp, Wallet, Loader2, MessageCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
-import { chaveDiaLocal, formatCurrency, formatDateTime } from '@/lib/format'
+import {
+  chaveDiaLocal,
+  formatCurrency,
+  formatDataHoraClinica,
+  formatDateTime,
+  parseDataHoraClinica,
+  toDataHoraClinica,
+} from '@/lib/format'
 import { AgendamentoStatusBadge } from '@/components/ui/StatusBadge'
 import DashboardPedidos from '@/components/dashboard/DashboardPedidos'
 import type { LeadPaciente } from '@/types/database'
@@ -136,15 +143,15 @@ function DashboardAgendamento() {
           .select('id', { count: 'exact', head: true })
           .eq('instance_id', instanceId)
           .neq('status', 'cancelado')
-          .gte('data_hora', todayStart.toISOString())
-          .lt('data_hora', todayEnd.toISOString()),
+          .gte('data_hora', toDataHoraClinica(todayStart))
+          .lt('data_hora', toDataHoraClinica(todayEnd)),
         supabase
           .from('agendamentos')
           .select('id', { count: 'exact', head: true })
           .eq('instance_id', instanceId)
           .neq('status', 'cancelado')
-          .gte('data_hora', yesterdayStart.toISOString())
-          .lt('data_hora', todayStart.toISOString()),
+          .gte('data_hora', toDataHoraClinica(yesterdayStart))
+          .lt('data_hora', toDataHoraClinica(todayStart)),
         supabase
           .from('leads_pacientes')
           .select('id, status')
@@ -161,26 +168,26 @@ function DashboardAgendamento() {
           .select('id, data_hora, status, servicos(valor)')
           .eq('instance_id', instanceId)
           .in('status', ['confirmado', 'compareceu'])
-          .gte('data_hora', monthStart.toISOString()),
+          .gte('data_hora', toDataHoraClinica(monthStart)),
         supabase
           .from('agendamentos')
           .select('id, data_hora, status, servicos(valor)')
           .eq('instance_id', instanceId)
           .in('status', ['confirmado', 'compareceu'])
-          .gte('data_hora', prevMonthStart.toISOString())
-          .lt('data_hora', monthStart.toISOString()),
+          .gte('data_hora', toDataHoraClinica(prevMonthStart))
+          .lt('data_hora', toDataHoraClinica(monthStart)),
         supabase
           .from('agendamentos')
           .select('id, data_hora')
           .eq('instance_id', instanceId)
           .neq('status', 'cancelado')
-          .gte('data_hora', inicioGrafico.toISOString()),
+          .gte('data_hora', toDataHoraClinica(inicioGrafico)),
         supabase
           .from('agendamentos')
           .select('id, data_hora, leads_pacientes(nome), servicos(nome)')
           .eq('instance_id', instanceId)
           .eq('status', 'confirmado')
-          .gte('data_hora', now.toISOString())
+          .gte('data_hora', toDataHoraClinica(now))
           .order('data_hora', { ascending: true })
           .limit(5),
         supabase
@@ -212,8 +219,7 @@ function DashboardAgendamento() {
         servicos: { valor: number } | null
       }>
 
-      // Agrupa pelo dia LOCAL. data_hora é hora de parede da clínica (sem fuso),
-      // então new Date() sem 'Z' já interpreta como local — não usar parseAsUtc.
+      // Agrupa pelo dia LOCAL. data_hora é hora da clínica (sem fuso).
       const byDay = new Map<string, ChartPoint>()
       for (let i = 0; i < DIAS_GRAFICO; i++) {
         const d = new Date(inicioGrafico.getFullYear(), inicioGrafico.getMonth(), inicioGrafico.getDate() + i)
@@ -223,7 +229,7 @@ function DashboardAgendamento() {
         })
       }
       for (const row of agendamentos30dRes.data ?? []) {
-        const ponto = byDay.get(chaveDiaLocal(new Date((row as { data_hora: string }).data_hora)))
+        const ponto = byDay.get(chaveDiaLocal(parseDataHoraClinica((row as { data_hora: string }).data_hora)))
         if (ponto) ponto.total++
       }
       const chart: ChartPoint[] = Array.from(byDay.values())
@@ -462,7 +468,7 @@ function DashboardAgendamento() {
                         <p className="truncate text-xs text-brand-gray">{a.servico}</p>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-1">
-                        <span className="text-xs text-brand-gray">{formatDateTime(a.data_hora)}</span>
+                        <span className="text-xs text-brand-gray">{formatDataHoraClinica(a.data_hora)}</span>
                         <AgendamentoStatusBadge status="confirmado" />
                       </div>
                     </li>

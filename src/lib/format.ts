@@ -17,6 +17,36 @@ export function parseAsUtc(value: string | Date): Date {
   return new Date(hasTimezone ? value : `${value}Z`)
 }
 
+/*
+ * agendamentos.data_hora é "HORA DA CLÍNICA": hora de parede local, gravada
+ * como timestamp sem fuso e SEM 'Z' (é assim que a IA/n8n e o link público
+ * gravam). É o oposto de criado_em/atualizado_em, que são UTC — por isso
+ * data_hora NUNCA passa por parseAsUtc/formatDateTime. Toda leitura e escrita
+ * de data_hora usa os três helpers abaixo.
+ */
+
+/**
+ * Lê data_hora como hora local. Campo a campo (e não new Date(str)) pra não
+ * depender de como cada navegador interpreta string sem fuso ou com espaço.
+ */
+export function parseDataHoraClinica(value: string): Date {
+  const m = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?/.exec(value)
+  if (!m) return new Date(NaN)
+  return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] ?? 0))
+}
+
+export function formatDataHoraClinica(value: string): string {
+  return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(
+    parseDataHoraClinica(value)
+  )
+}
+
+/** Date local → valor pra gravar/filtrar data_hora: "YYYY-MM-DD HH:mm:ss", sem fuso. */
+export function toDataHoraClinica(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+}
+
 /**
  * Chave "YYYY-MM-DD" do dia no fuso LOCAL do navegador, pra agrupar por dia.
  * Não usar toISOString().slice(0, 10) nem new Date('YYYY-MM-DD'): ambos são

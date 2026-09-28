@@ -1,4 +1,5 @@
 import type { HorarioDisponivel } from '@/types/database'
+import { toDataHoraClinica } from '@/lib/format'
 
 export interface OcupacaoExistente {
   inicioMinutos: number
@@ -75,9 +76,9 @@ export function combineDateAndTime(date: Date, time: string): Date {
   return combined
 }
 
+/** Formato de agendamentos.data_hora (hora da clínica) — mesmo helper do painel. */
 export function toLocalTimestamp(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+  return toDataHoraClinica(date)
 }
 
 export function minutesFromDate(date: Date): number {

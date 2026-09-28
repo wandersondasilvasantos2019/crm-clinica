@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { parseDataHoraClinica, toDataHoraClinica } from '@/lib/format'
 import Modal from '@/components/ui/Modal'
 import LeadSelect from './LeadSelect'
 import type { Profissional, Servico } from '@/types/database'
@@ -75,7 +76,8 @@ export default function NovoAgendamentoModal({
       lead_id: leadId,
       servico_id: servicoId,
       profissional_id: profissionalId || null,
-      data_hora: new Date(dataHora).toISOString(),
+      // Hora da clínica, sem fuso — mesmo formato da IA e do link público.
+      data_hora: toDataHoraClinica(parseDataHoraClinica(dataHora)),
       status: 'confirmado',
       criado_via: 'painel_web',
     })

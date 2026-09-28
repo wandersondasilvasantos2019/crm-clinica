@@ -3,7 +3,7 @@ import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import Modal from '@/components/ui/Modal'
 import { AgendamentoStatusBadge } from '@/components/ui/StatusBadge'
-import { formatCurrency, formatDateTime, formatPhone } from '@/lib/format'
+import { formatCurrency, formatDataHoraClinica, formatPhone } from '@/lib/format'
 import type { AgendamentoDetalhado } from '@/types/database'
 
 interface AgendamentoDetailModalProps {
@@ -67,7 +67,7 @@ export default function AgendamentoDetailModal({
             </div>
             <div className="flex justify-between">
               <dt className="text-gray-400">Data e hora</dt>
-              <dd className="text-gray-700">{formatDateTime(agendamento.data_hora)}</dd>
+              <dd className="text-gray-700">{formatDataHoraClinica(agendamento.data_hora)}</dd>
             </div>
           </dl>
 

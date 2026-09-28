@@ -2,6 +2,7 @@ import { Calendar, dateFnsLocalizer, type SlotInfo } from 'react-big-calendar'
 import { format, parse, startOfWeek, getDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { parseDataHoraClinica } from '@/lib/format'
 import type { AgendamentoDetalhado } from '@/types/database'
 
 const locales = { 'pt-BR': ptBR }
@@ -41,7 +42,7 @@ export default function CalendarView({
   onSelectEvent,
 }: CalendarViewProps) {
   const events: CalendarEvent[] = agendamentos.map((a) => {
-    const start = new Date(a.data_hora)
+    const start = parseDataHoraClinica(a.data_hora)
     const duracao = a.servico?.duracao_minutos ?? 30
     const end = new Date(start.getTime() + duracao * 60 * 1000)
     return {

@@ -15,7 +15,7 @@ import {
 import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
-import { formatCurrency } from '@/lib/format'
+import { chaveDiaLocal, formatCurrency, parseDataHoraClinica, toDataHoraClinica } from '@/lib/format'
 import { LEAD_STATUS_LABELS } from '@/types/database'
 import type { LeadStatus } from '@/types/database'
 
@@ -61,7 +61,7 @@ export default function Estatisticas() {
           .from('agendamentos')
           .select('data_hora, status, servico:servicos(nome, valor)')
           .eq('instance_id', instanceId)
-          .gte('data_hora', periodStart.toISOString()),
+          .gte('data_hora', toDataHoraClinica(periodStart)),
         supabase
           .from('leads_pacientes')
           .select('status')
@@ -85,7 +85,7 @@ export default function Estatisticas() {
           servicosMap.set(a.servico.nome, (servicosMap.get(a.servico.nome) ?? 0) + 1)
         }
         if (a.status === 'compareceu' && a.servico) {
-          const mesKey = a.data_hora.slice(0, 7)
+          const mesKey = chaveDiaLocal(parseDataHoraClinica(a.data_hora)).slice(0, 7)
           faturamentoMap.set(mesKey, (faturamentoMap.get(mesKey) ?? 0) + Number(a.servico.valor))
         }
       }
@@ -94,7 +94,7 @@ export default function Estatisticas() {
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([mesKey, valor]) => ({
           mes: new Intl.DateTimeFormat('pt-BR', { month: 'short', year: '2-digit' }).format(
-            new Date(`${mesKey}-01T00:00:00`)
+            parseDataHoraClinica(`${mesKey}-01T00:00:00`)
           ),
           valor,
         }))
