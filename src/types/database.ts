@@ -116,6 +116,7 @@ export interface Pedido {
   criado_via: string
   criado_em: string
   atualizado_em: string
+  aceito_em: string | null
 }
 
 export interface PedidoComItens extends Pedido {

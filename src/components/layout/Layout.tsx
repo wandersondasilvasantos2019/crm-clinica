@@ -3,6 +3,7 @@ import { Menu } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import Sidebar from './Sidebar'
 import InstanceSwitcher from './InstanceSwitcher'
+import AlertaPedidos from '@/components/pedidos/AlertaPedidos'
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -26,6 +27,8 @@ export default function Layout({ children }: { children: ReactNode }) {
 
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
+
+      <AlertaPedidos />
     </div>
   )
 }
