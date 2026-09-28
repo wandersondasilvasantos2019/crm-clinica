@@ -4,6 +4,7 @@ export type ConversaRole = 'paciente' | 'ia'
 export type UsuarioRole = 'admin' | 'cliente'
 export type TipoNegocio = 'agendamento' | 'pedidos'
 export type StatusPedido = 'novo' | 'confirmado' | 'preparando' | 'entregue' | 'cancelado'
+export type AlertaSom = 'alarme' | 'campainha' | 'bipe' | 'suave'
 
 export interface Usuario {
   id: string
@@ -22,6 +23,9 @@ export interface ConfigCliente {
   tom_voz: string | null
   numero_humano: string | null
   tipo_negocio: TipoNegocio
+  alerta_som: AlertaSom | null
+  alerta_volume: number | null
+  alerta_intervalo_s: number | null
 }
 
 export interface Servico {

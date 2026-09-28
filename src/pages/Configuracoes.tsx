@@ -4,6 +4,7 @@ import TrocarSenhaSection from '@/components/configuracoes/TrocarSenhaSection'
 import ServicosSection from '@/components/configuracoes/ServicosSection'
 import ProfissionaisSection from '@/components/configuracoes/ProfissionaisSection'
 import ConectarWhatsappSection from '@/components/configuracoes/ConectarWhatsappSection'
+import AlertaPedidosSection from '@/components/configuracoes/AlertaPedidosSection'
 
 export default function Configuracoes() {
   const { instances, instanceId } = useInstance()
@@ -24,6 +25,7 @@ export default function Configuracoes() {
       </div>
 
       <ConfigClienteSection />
+      {isPedidos && <AlertaPedidosSection />}
       <TrocarSenhaSection />
       <ConectarWhatsappSection />
       {!isPedidos && <ServicosSection instanceId={instanceId} />}

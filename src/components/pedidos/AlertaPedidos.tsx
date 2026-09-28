@@ -5,10 +5,13 @@ import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
 import {
   audioLiberado,
+  configAlertaDoCliente,
   desbloquearAudio,
   iniciarAlertaEmLoop,
+  iniciarKeepAlive,
   onAudioStateChange,
   tocarTesteAlarme,
+  type ConfigAlerta,
 } from '@/lib/alertaSom'
 import { formatCurrency, formatPhone, formatRelativeTime, stripWhatsappSuffix } from '@/lib/format'
 import type { ItemPedido, Pedido, PedidoComItens } from '@/types/database'
@@ -85,20 +88,32 @@ function mostrarNotificacao(pedido: Pedido): Notification | null {
 /** Monta o alerta só para negócios de pedidos — agendamento não é afetado. */
 export default function AlertaPedidos() {
   const { instances, instanceId } = useInstance()
-  const tipoNegocio = instances.find((i) => i.instance_id === instanceId)?.tipo_negocio
-  if (!instanceId || tipoNegocio !== 'pedidos') return null
-  return <AlertaPedidosAtivo key={instanceId} instanceId={instanceId} />
+  const cliente = instances.find((i) => i.instance_id === instanceId)
+  if (!instanceId || cliente?.tipo_negocio !== 'pedidos') return null
+  // A config vem do config_cliente já carregado no InstanceContext; ao salvar em
+  // Configurações, o refreshInstances() entrega os valores novos aqui.
+  return (
+    <AlertaPedidosAtivo key={instanceId} instanceId={instanceId} config={configAlertaDoCliente(cliente)} />
+  )
 }
 
-function AlertaPedidosAtivo({ instanceId }: { instanceId: string }) {
+function AlertaPedidosAtivo({ instanceId, config }: { instanceId: string; config: ConfigAlerta }) {
   const { pedidos, remover } = usePedidosNovos(instanceId)
   const somLiberado = useSomLiberado()
   const temPedidos = pedidos.length > 0
+  const { som, volume, intervaloS } = config
 
+  // Os ciclos ficam agendados com antecedência, então mudar a config reinicia o
+  // loop (dependências primitivas: refreshInstances recria o objeto a cada carga).
   useEffect(() => {
     if (!temPedidos || !somLiberado) return
-    return iniciarAlertaEmLoop()
-  }, [temPedidos, somLiberado])
+    return iniciarAlertaEmLoop({ som, volume, intervaloS })
+  }, [temPedidos, somLiberado, som, volume, intervaloS])
+
+  useEffect(() => {
+    if (!somLiberado) return
+    return iniciarKeepAlive()
+  }, [somLiberado])
 
   useTituloPiscando(temPedidos)
 
@@ -141,10 +156,15 @@ function AlertaPedidosAtivo({ instanceId }: { instanceId: string }) {
           >
             🔔 Clique aqui para ativar o som dos pedidos
           </button>
-          <BotaoTestarSom className="border-l border-amber-500/50 px-4 transition hover:bg-amber-300" />
+          <BotaoTestarSom
+            config={config}
+            className="border-l border-amber-500/50 px-4 transition hover:bg-amber-300"
+          />
         </div>
       )}
-      {temPedidos && <ModalPedidosNovos pedidos={pedidos} onAceitar={aceitar} onRecusar={recusar} />}
+      {temPedidos && (
+        <ModalPedidosNovos pedidos={pedidos} config={config} onAceitar={aceitar} onRecusar={recusar} />
+      )}
     </>
   )
 }
@@ -321,9 +341,9 @@ function useTituloPiscando(ativo: boolean) {
 }
 
 /** Toca 1 ciclo do alarme, pro dono ajustar o volume do computador/caixa de som. */
-function BotaoTestarSom({ className }: { className?: string }) {
+function BotaoTestarSom({ config, className }: { config: ConfigAlerta; className?: string }) {
   return (
-    <button type="button" onClick={() => void tocarTesteAlarme()} className={className}>
+    <button type="button" onClick={() => void tocarTesteAlarme(config)} className={className}>
       🔊 Testar som
     </button>
   )
@@ -331,11 +351,12 @@ function BotaoTestarSom({ className }: { className?: string }) {
 
 interface ModalPedidosNovosProps {
   pedidos: PedidoComItens[]
+  config: ConfigAlerta
   onAceitar: (pedido: PedidoComItens) => Promise<boolean>
   onRecusar: (pedido: PedidoComItens) => Promise<boolean>
 }
 
-function ModalPedidosNovos({ pedidos, onAceitar, onRecusar }: ModalPedidosNovosProps) {
+function ModalPedidosNovos({ pedidos, config, onAceitar, onRecusar }: ModalPedidosNovosProps) {
   // Re-renderiza periodicamente pra atualizar o "há X minutos".
   const [, setTick] = useState(0)
   useEffect(() => {
@@ -358,7 +379,10 @@ function ModalPedidosNovos({ pedidos, onAceitar, onRecusar }: ModalPedidosNovosP
           <h2 id="alerta-pedidos-titulo" className="text-lg font-bold">
             {pedidos.length === 1 ? 'Novo pedido!' : `${pedidos.length} novos pedidos!`}
           </h2>
-          <BotaoTestarSom className="ml-auto rounded-lg bg-white/15 px-3 py-1.5 text-sm font-semibold transition hover:bg-white/25" />
+          <BotaoTestarSom
+            config={config}
+            className="ml-auto rounded-lg bg-white/15 px-3 py-1.5 text-sm font-semibold transition hover:bg-white/25"
+          />
         </div>
         <div className="space-y-4 overflow-y-auto bg-brand-light p-4 sm:p-5">
           {pedidos.map((pedido) => (
