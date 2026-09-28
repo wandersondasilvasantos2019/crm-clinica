@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Loader2, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
@@ -26,9 +26,15 @@ export default function AlertaPedidosSection() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Preenche o formulário uma vez por negócio: o refreshInstances() disparado ao
+  // salvar outra seção não pode apagar o que ainda não foi salvo aqui.
+  const carregadoParaRef = useRef<string | null>(null)
 
   useEffect(() => {
-    const config = configAlertaDoCliente(instances.find((i) => i.instance_id === instanceId))
+    const current = instances.find((i) => i.instance_id === instanceId)
+    if (!current || carregadoParaRef.current === instanceId) return
+    carregadoParaRef.current = instanceId
+    const config = configAlertaDoCliente(current)
     setSom(config.som)
     setVolumePct(Math.round(config.volume * 100))
     setIntervaloS(config.intervaloS)

@@ -14,6 +14,11 @@ export default function Layout({ children }: { children: ReactNode }) {
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* Aqui (e não no fim) pra faixa "ativar som" ocupar o topo da coluna e
+            empurrar o header, em vez de cobrir o botão de menu no celular.
+            O modal de pedido novo usa portal e não depende da posição. */}
+        <AlertaPedidos />
+
         <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-gray-100 bg-brand-light/80 px-4 py-3 backdrop-blur lg:justify-end">
           <button
             className="rounded-md p-2 text-gray-700 hover:bg-white lg:hidden"
@@ -27,8 +32,6 @@ export default function Layout({ children }: { children: ReactNode }) {
 
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
-
-      <AlertaPedidos />
     </div>
   )
 }

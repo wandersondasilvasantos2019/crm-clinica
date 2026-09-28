@@ -120,9 +120,11 @@ function AlertaPedidosAtivo({ instanceId, config }: { instanceId: string; config
   async function aceitar(pedido: PedidoComItens): Promise<boolean> {
     const agora = new Date().toISOString()
     // O filtro por status evita sobrescrever um pedido que outra pessoa já tratou.
+    // aceito_em não vai aqui: o trigger pedidos_set_timestamps grava now() do
+    // servidor em toda transição novo→confirmado (Kanban e modal inclusive).
     const { error } = await supabase
       .from('pedidos')
-      .update({ status: 'confirmado', aceito_em: agora, atualizado_em: agora })
+      .update({ status: 'confirmado', atualizado_em: agora })
       .eq('id', pedido.id)
       .eq('status', 'novo')
     if (error) return false
@@ -145,7 +147,7 @@ function AlertaPedidosAtivo({ instanceId, config }: { instanceId: string; config
   return (
     <>
       {!somLiberado && (
-        <div className="fixed inset-x-0 top-0 z-[70] flex items-stretch bg-amber-400 text-sm font-semibold text-amber-950 shadow-md">
+        <div className="flex items-stretch bg-amber-400 text-sm font-semibold text-amber-950 shadow-md">
           <button
             type="button"
             onClick={() => {
@@ -163,7 +165,13 @@ function AlertaPedidosAtivo({ instanceId, config }: { instanceId: string; config
         </div>
       )}
       {temPedidos && (
-        <ModalPedidosNovos pedidos={pedidos} config={config} onAceitar={aceitar} onRecusar={recusar} />
+        <ModalPedidosNovos
+          pedidos={pedidos}
+          config={config}
+          somLiberado={somLiberado}
+          onAceitar={aceitar}
+          onRecusar={recusar}
+        />
       )}
     </>
   )
@@ -352,11 +360,12 @@ function BotaoTestarSom({ config, className }: { config: ConfigAlerta; className
 interface ModalPedidosNovosProps {
   pedidos: PedidoComItens[]
   config: ConfigAlerta
+  somLiberado: boolean
   onAceitar: (pedido: PedidoComItens) => Promise<boolean>
   onRecusar: (pedido: PedidoComItens) => Promise<boolean>
 }
 
-function ModalPedidosNovos({ pedidos, config, onAceitar, onRecusar }: ModalPedidosNovosProps) {
+function ModalPedidosNovos({ pedidos, config, somLiberado, onAceitar, onRecusar }: ModalPedidosNovosProps) {
   // Re-renderiza periodicamente pra atualizar o "há X minutos".
   const [, setTick] = useState(0)
   useEffect(() => {
@@ -384,6 +393,13 @@ function ModalPedidosNovos({ pedidos, config, onAceitar, onRecusar }: ModalPedid
             className="ml-auto rounded-lg bg-white/15 px-3 py-1.5 text-sm font-semibold transition hover:bg-white/25"
           />
         </div>
+        {/* A faixa "ativar som" fica sob o fundo escuro do modal; qualquer toque
+            aqui já libera o áudio (listener global em useSomLiberado). */}
+        {!somLiberado && (
+          <p className="bg-amber-100 px-5 py-2 text-sm font-medium text-amber-900">
+            🔇 Som desativado — toque em qualquer lugar para ativar.
+          </p>
+        )}
         <div className="space-y-4 overflow-y-auto bg-brand-light p-4 sm:p-5">
           {pedidos.map((pedido) => (
             <CardPedidoNovo key={pedido.id} pedido={pedido} onAceitar={onAceitar} onRecusar={onRecusar} />

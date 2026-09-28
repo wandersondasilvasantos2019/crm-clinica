@@ -18,6 +18,11 @@ const COLUMN_COLORS: Record<StatusPedido, string> = {
 }
 
 const PEDIDO_SELECT = '*, itens_pedido(*)'
+const STATUS_ABERTOS: StatusPedido[] = ['novo', 'confirmado', 'preparando']
+const STATUS_FINALIZADOS: StatusPedido[] = ['entregue', 'cancelado']
+// Entregues/cancelados só aparecem por alguns dias — sem isso a página carrega a
+// história inteira de pedidos e a coluna "Entregue" cresce pra sempre.
+const DIAS_FINALIZADOS = 7
 
 // A IA costuma inserir o pedido e só depois os itens — espera um pouco antes de
 // buscar os itens de um pedido recém-criado recebido via realtime.
@@ -43,14 +48,31 @@ export default function Pedidos() {
 
     async function load() {
       setLoading(true)
-      const { data } = await supabase
-        .from('pedidos')
-        .select(PEDIDO_SELECT)
-        .eq('instance_id', instanceId)
-        .order('criado_em', { ascending: false })
+      const agora = new Date()
+      // Meia-noite local de N dias atrás; criado_em é UTC, então compara em ISO.
+      const inicioFinalizados = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - DIAS_FINALIZADOS)
+
+      const [abertosRes, finalizadosRes] = await Promise.all([
+        supabase
+          .from('pedidos')
+          .select(PEDIDO_SELECT)
+          .eq('instance_id', instanceId)
+          .in('status', STATUS_ABERTOS)
+          .order('criado_em', { ascending: false }),
+        supabase
+          .from('pedidos')
+          .select(PEDIDO_SELECT)
+          .eq('instance_id', instanceId)
+          .in('status', STATUS_FINALIZADOS)
+          .gte('criado_em', inicioFinalizados.toISOString())
+          .order('criado_em', { ascending: false }),
+      ])
 
       if (!cancelled) {
-        setPedidos((data ?? []).map(normalize))
+        const todos = [...(abertosRes.data ?? []), ...(finalizadosRes.data ?? [])]
+          .map(normalize)
+          .sort((a, b) => b.criado_em.localeCompare(a.criado_em))
+        setPedidos(todos)
         setLoading(false)
       }
     }
@@ -66,34 +88,32 @@ export default function Pedidos() {
       )
     }
 
+    function upsertLocal(incoming: Pedido) {
+      setPedidos((current) => {
+        const existing = current.find((p) => p.id === incoming.id)
+        if (existing) {
+          return current.map((p) =>
+            p.id === incoming.id ? { ...incoming, itens_pedido: existing.itens_pedido } : p
+          )
+        }
+        return [{ ...incoming, itens_pedido: [] }, ...current]
+      })
+    }
+
     load()
 
+    // Só INSERT/UPDATE: o Supabase não entrega DELETE em canais com filtro.
+    const filter = `instance_id=eq.${instanceId}`
     const channel = supabase
       .channel(`pedidos-${instanceId}`)
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'pedidos', filter: `instance_id=eq.${instanceId}` },
-        (payload) => {
-          if (payload.eventType === 'DELETE') {
-            const removedId = (payload.old as Pedido).id
-            setPedidos((current) => current.filter((p) => p.id !== removedId))
-            return
-          }
-          const incoming = payload.new as Pedido
-          setPedidos((current) => {
-            const existing = current.find((p) => p.id === incoming.id)
-            if (existing) {
-              return current.map((p) =>
-                p.id === incoming.id ? { ...incoming, itens_pedido: existing.itens_pedido } : p
-              )
-            }
-            return [{ ...incoming, itens_pedido: [] }, ...current]
-          })
-          if (payload.eventType === 'INSERT') {
-            timers.push(setTimeout(() => refetchOne(incoming.id), INSERT_REFETCH_DELAY_MS))
-          }
-        }
-      )
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pedidos', filter }, (payload) => {
+        const incoming = payload.new as Pedido
+        upsertLocal(incoming)
+        timers.push(setTimeout(() => refetchOne(incoming.id), INSERT_REFETCH_DELAY_MS))
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pedidos', filter }, (payload) => {
+        upsertLocal(payload.new as Pedido)
+      })
       .subscribe()
 
     return () => {
@@ -173,7 +193,9 @@ export default function Pedidos() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Pedidos</h1>
-          <p className="text-sm text-brand-gray">Acompanhe os pedidos por etapa</p>
+          <p className="text-sm text-brand-gray">
+            Acompanhe os pedidos por etapa · entregues e cancelados dos últimos {DIAS_FINALIZADOS} dias
+          </p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <button

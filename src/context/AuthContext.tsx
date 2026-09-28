@@ -19,9 +19,15 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  const [role, setRole] = useState<UsuarioRole | null>(null)
-  const [ownInstanceId, setOwnInstanceId] = useState<string | null>(null)
-  const [roleLoading, setRoleLoading] = useState(true)
+  // Papel carregado + para qual usuário. O refresh do token troca o objeto de
+  // sessão (a cada ~1h e ao voltar para a aba) mas não o usuário — derivar o
+  // "carregando" do userId evita desmontar o app inteiro nesses momentos.
+  const [roleState, setRoleState] = useState<{
+    userId: string
+    role: UsuarioRole | null
+    ownInstanceId: string | null
+  } | null>(null)
+  const userId = session?.user.id ?? null
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -39,32 +45,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (!session) {
-      setRole(null)
-      setOwnInstanceId(null)
-      setRoleLoading(false)
+    if (!userId) {
+      setRoleState(null)
       return
     }
 
     let cancelled = false
-    setRoleLoading(true)
 
     supabase
       .from('usuarios')
       .select('role, instance_id')
-      .eq('id', session.user.id)
+      .eq('id', userId)
       .maybeSingle()
       .then(({ data }) => {
         if (cancelled) return
-        setRole(data?.role ?? null)
-        setOwnInstanceId(data?.instance_id ?? null)
-        setRoleLoading(false)
+        setRoleState({ userId, role: data?.role ?? null, ownInstanceId: data?.instance_id ?? null })
       })
 
     return () => {
       cancelled = true
     }
-  }, [session])
+  }, [userId])
+
+  const roleCarregado = roleState !== null && roleState.userId === userId
+  const role = roleCarregado ? roleState.role : null
+  const ownInstanceId = roleCarregado ? roleState.ownInstanceId : null
+  const roleLoading = userId !== null && !roleCarregado
 
   async function signIn(email: string, password: string) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })

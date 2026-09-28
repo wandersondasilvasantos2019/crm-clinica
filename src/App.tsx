@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import RequireTipoNegocio from '@/components/RequireTipoNegocio'
 import Layout from '@/components/layout/Layout'
 import Login from '@/pages/Login'
 import Dashboard from '@/pages/Dashboard'
@@ -36,7 +37,9 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <Contatos />
+              <RequireTipoNegocio tipo="agendamento">
+                <Contatos />
+              </RequireTipoNegocio>
             </Layout>
           </ProtectedRoute>
         }
@@ -46,7 +49,9 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <Agendamentos />
+              <RequireTipoNegocio tipo="agendamento">
+                <Agendamentos />
+              </RequireTipoNegocio>
             </Layout>
           </ProtectedRoute>
         }
@@ -56,7 +61,9 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <Estatisticas />
+              <RequireTipoNegocio tipo="agendamento">
+                <Estatisticas />
+              </RequireTipoNegocio>
             </Layout>
           </ProtectedRoute>
         }
@@ -86,7 +93,9 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <Cardapio />
+              <RequireTipoNegocio tipo="pedidos">
+                <Cardapio />
+              </RequireTipoNegocio>
             </Layout>
           </ProtectedRoute>
         }
@@ -96,7 +105,9 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <Pedidos />
+              <RequireTipoNegocio tipo="pedidos">
+                <Pedidos />
+              </RequireTipoNegocio>
             </Layout>
           </ProtectedRoute>
         }

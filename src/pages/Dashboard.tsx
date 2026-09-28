@@ -8,14 +8,11 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
-  PieChart,
-  Pie,
-  Cell,
 } from 'recharts'
 import { UserPlus, CalendarCheck2, TrendingUp, Wallet, Loader2, MessageCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
-import { formatCurrency, formatDateTime } from '@/lib/format'
+import { chaveDiaLocal, formatCurrency, formatDateTime } from '@/lib/format'
 import { AgendamentoStatusBadge } from '@/components/ui/StatusBadge'
 import DashboardPedidos from '@/components/dashboard/DashboardPedidos'
 import type { LeadPaciente } from '@/types/database'
@@ -49,12 +46,7 @@ interface AtendimentoEmAndamento {
   horario: string | null
 }
 
-const LEAD_ORIGENS = [
-  { name: 'WhatsApp', value: 62, color: '#0EA57A' },
-  { name: 'Instagram', value: 18, color: '#F2A65A' },
-  { name: 'Site', value: 12, color: '#13C296' },
-  { name: 'Indicação', value: 8, color: '#8FD9C4' },
-]
+const DIAS_GRAFICO = 30
 
 function startOfDay(d: Date) {
   const x = new Date(d)
@@ -66,8 +58,9 @@ function startOfMonth(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), 1)
 }
 
-function pctChange(current: number, previous: number) {
-  if (previous === 0) return current > 0 ? 100 : 0
+/** Variação percentual; null quando o período anterior foi 0 (não há base pra comparar). */
+function pctChange(current: number, previous: number): number | null {
+  if (previous === 0) return null
   return ((current - previous) / previous) * 100
 }
 
@@ -110,7 +103,8 @@ function DashboardAgendamento() {
       const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000)
       const monthStart = startOfMonth(now)
       const prevMonthStart = new Date(monthStart.getFullYear(), monthStart.getMonth() - 1, 1)
-      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+      // Meia-noite local de 29 dias atrás: o gráfico cobre hoje + os 29 dias anteriores.
+      const inicioGrafico = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (DIAS_GRAFICO - 1))
 
       const [
         leadsHojeRes,
@@ -180,7 +174,7 @@ function DashboardAgendamento() {
           .select('id, data_hora')
           .eq('instance_id', instanceId)
           .neq('status', 'cancelado')
-          .gte('data_hora', thirtyDaysAgo.toISOString()),
+          .gte('data_hora', inicioGrafico.toISOString()),
         supabase
           .from('agendamentos')
           .select('id, data_hora, leads_pacientes(nome), servicos(nome)')
@@ -218,21 +212,21 @@ function DashboardAgendamento() {
         servicos: { valor: number } | null
       }>
 
-      const byDay = new Map<string, number>()
-      for (let i = 0; i < 30; i++) {
-        const d = new Date(thirtyDaysAgo.getTime() + i * 24 * 60 * 60 * 1000)
-        byDay.set(d.toISOString().slice(0, 10), 0)
+      // Agrupa pelo dia LOCAL. data_hora é hora de parede da clínica (sem fuso),
+      // então new Date() sem 'Z' já interpreta como local — não usar parseAsUtc.
+      const byDay = new Map<string, ChartPoint>()
+      for (let i = 0; i < DIAS_GRAFICO; i++) {
+        const d = new Date(inicioGrafico.getFullYear(), inicioGrafico.getMonth(), inicioGrafico.getDate() + i)
+        byDay.set(chaveDiaLocal(d), {
+          dia: new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit' }).format(d),
+          total: 0,
+        })
       }
       for (const row of agendamentos30dRes.data ?? []) {
-        const key = (row as { data_hora: string }).data_hora.slice(0, 10)
-        if (byDay.has(key)) byDay.set(key, (byDay.get(key) ?? 0) + 1)
+        const ponto = byDay.get(chaveDiaLocal(new Date((row as { data_hora: string }).data_hora)))
+        if (ponto) ponto.total++
       }
-      const chart: ChartPoint[] = Array.from(byDay.entries()).map(([key, total]) => ({
-        dia: new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit' }).format(
-          new Date(key)
-        ),
-        total,
-      }))
+      const chart: ChartPoint[] = Array.from(byDay.values())
 
       const proximosList: AgendamentoUpcoming[] = (proximosRes.data ?? []).map((row: any) => ({
         id: row.id,
@@ -352,8 +346,8 @@ function DashboardAgendamento() {
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {cards.map((c) => {
-              const isPositive = c.change > 0
-              const isNeutral = c.change === 0
+              const isPositive = (c.change ?? 0) > 0
+              const isNeutral = c.change === null || c.change === 0
               return (
                 <div key={c.label} className="card">
                   <div className="flex items-center justify-between">
@@ -368,7 +362,8 @@ function DashboardAgendamento() {
                       isNeutral ? 'text-brand-gray' : isPositive ? 'text-brand-primary' : 'text-rose-500'
                     }`}
                   >
-                    {isNeutral ? '—' : `${isPositive ? '+' : ''}${c.change.toFixed(0)}%`} {c.changeLabel}
+                    {isNeutral || c.change === null ? '—' : `${isPositive ? '+' : ''}${c.change.toFixed(0)}%`}{' '}
+                    {c.changeLabel}
                   </p>
                 </div>
               )
@@ -376,9 +371,9 @@ function DashboardAgendamento() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <div className="card">
+            <div className="card lg:col-span-2">
               <h2 className="mb-4 text-sm font-semibold text-gray-900">
-                Agendamentos por dia (últimos 30 dias)
+                Agendamentos por dia (últimos {DIAS_GRAFICO} dias)
               </h2>
               <ResponsiveContainer width="100%" height={260}>
                 <AreaChart data={chartData}>
@@ -412,52 +407,6 @@ function DashboardAgendamento() {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-            </div>
-
-            <div className="card">
-              <h2 className="mb-4 text-sm font-semibold text-gray-900">Origens dos leads</h2>
-              <div className="flex items-center gap-6">
-                <ResponsiveContainer width="50%" height={220}>
-                  <PieChart>
-                    <Pie
-                      data={LEAD_ORIGENS}
-                      dataKey="value"
-                      nameKey="name"
-                      innerRadius={55}
-                      outerRadius={80}
-                      paddingAngle={2}
-                    >
-                      {LEAD_ORIGENS.map((entry) => (
-                        <Cell key={entry.name} fill={entry.color} stroke="none" />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value: number) => `${value}%`}
-                      contentStyle={{
-                        background: '#ffffff',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: 12,
-                        fontSize: 13,
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                <ul className="flex-1 space-y-2.5">
-                  {LEAD_ORIGENS.map((origem) => (
-                    <li key={origem.name} className="flex items-center justify-between text-sm">
-                      <span className="flex items-center gap-2 text-gray-700">
-                        <span
-                          className="h-2.5 w-2.5 shrink-0 rounded-full"
-                          style={{ backgroundColor: origem.color }}
-                        />
-                        {origem.name}
-                      </span>
-                      <span className="font-medium text-gray-900">{origem.value}%</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             </div>
           </div>
 

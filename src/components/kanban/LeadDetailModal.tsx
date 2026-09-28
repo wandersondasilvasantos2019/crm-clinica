@@ -35,6 +35,7 @@ export default function LeadDetailModal({ lead, onClose }: LeadDetailModalProps)
         supabase
           .from('conversas')
           .select('*')
+          .eq('instance_id', lead!.instance_id)
           .eq('telefone', lead!.telefone)
           .order('criado_em', { ascending: true }),
         supabase

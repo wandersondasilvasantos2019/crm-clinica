@@ -53,7 +53,8 @@ export default function AgendarPublico() {
         .maybeSingle()
 
       if (cancelled) return
-      if (error || !data) {
+      // Restaurante (vertical de pedidos) não tem agenda: trata como link inválido.
+      if (error || !data || data.tipo_negocio === 'pedidos') {
         setClinicError(true)
         setClinicLoading(false)
         return

@@ -26,6 +26,10 @@ export interface ConfigCliente {
   alerta_som: AlertaSom | null
   alerta_volume: number | null
   alerta_intervalo_s: number | null
+  // Vertical de pedidos — usados pela IA ao fechar o pedido.
+  endereco: string | null
+  taxa_entrega_por_km: number | null
+  formas_pagamento: string | null
 }
 
 export interface Servico {

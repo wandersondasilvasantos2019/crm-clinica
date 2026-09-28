@@ -13,6 +13,7 @@ import {
 import { ShoppingBag, Wallet, Receipt, CalendarRange, Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import {
+  chaveDiaLocal,
   formatCurrency,
   formatPhone,
   formatRelativeTime,
@@ -72,16 +73,10 @@ const METRICAS_VAZIAS: Metricas = {
   faturamentoMesAnterior: 0,
 }
 
-function pctChange(current: number, previous: number) {
-  if (previous === 0) return current > 0 ? 100 : 0
+/** Variação percentual; null quando o período anterior foi 0 (não há base pra comparar). */
+function pctChange(current: number, previous: number): number | null {
+  if (previous === 0) return null
   return ((current - previous) / previous) * 100
-}
-
-/** Chave do dia no fuso local do navegador (não usar toISOString: é UTC). */
-function chaveDiaLocal(d: Date) {
-  const mes = String(d.getMonth() + 1).padStart(2, '0')
-  const dia = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${mes}-${dia}`
 }
 
 async function buscarTodos<T>(
@@ -376,14 +371,15 @@ interface CardMetricaProps {
   label: string
   value: string | number
   icon: ComponentType<{ className?: string }>
-  change?: number
+  /** undefined = card sem comparação (mostra a legenda); null = sem base pra comparar. */
+  change?: number | null
   changeLabel?: string
   legenda?: string
 }
 
 function CardMetrica({ label, value, icon: Icon, change, changeLabel, legenda }: CardMetricaProps) {
   const isPositive = (change ?? 0) > 0
-  const isNeutral = change === 0
+  const isNeutral = change === null || change === 0
   return (
     <div className="card">
       <div className="flex items-center justify-between">
@@ -401,7 +397,7 @@ function CardMetrica({ label, value, icon: Icon, change, changeLabel, legenda }:
             isNeutral ? 'text-brand-gray' : isPositive ? 'text-brand-primary' : 'text-rose-500'
           }`}
         >
-          {isNeutral ? '—' : `${isPositive ? '+' : ''}${change.toFixed(0)}%`} {changeLabel}
+          {isNeutral || change === null ? '—' : `${isPositive ? '+' : ''}${change.toFixed(0)}%`} {changeLabel}
         </p>
       )}
     </div>

@@ -17,6 +17,17 @@ export function parseAsUtc(value: string | Date): Date {
   return new Date(hasTimezone ? value : `${value}Z`)
 }
 
+/**
+ * Chave "YYYY-MM-DD" do dia no fuso LOCAL do navegador, pra agrupar por dia.
+ * Não usar toISOString().slice(0, 10) nem new Date('YYYY-MM-DD'): ambos são
+ * UTC e jogam o que acontece depois das 20h/21h (UTC-4/-3) pro dia seguinte.
+ */
+export function chaveDiaLocal(d: Date): string {
+  const mes = String(d.getMonth() + 1).padStart(2, '0')
+  const dia = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${mes}-${dia}`
+}
+
 export function formatDate(value: string | Date, opts?: Intl.DateTimeFormatOptions): string {
   const date = parseAsUtc(value)
   return new Intl.DateTimeFormat('pt-BR', opts ?? { dateStyle: 'short' }).format(date)

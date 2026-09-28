@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Loader2, QrCode, CheckCircle2, Power } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
 
 const CRIAR_SESSAO_URL = 'https://n8n.wsantos.online/webhook/waha-criar-sessao'
@@ -12,10 +13,22 @@ const QR_REFRESH_SECONDS = 20
 
 type ConnectionState = 'checking' | 'disconnected' | 'loading_qr' | 'waiting_scan' | 'connected'
 
+/**
+ * Header com o access_token da sessão Supabase. O n8n valida o token e confere
+ * se o usuário é admin ou dono do instance_id antes de mexer na sessão WAHA.
+ * getSession() devolve o token já renovado pelo autoRefreshToken.
+ */
+async function authHeaders(): Promise<Record<string, string>> {
+  const { data } = await supabase.auth.getSession()
+  const token = data.session?.access_token
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
 async function fetchStatus(instanceId: string): Promise<string | null> {
   try {
     const res = await fetch(
-      `${STATUS_SESSAO_URL}?instance_id=${encodeURIComponent(instanceId)}`
+      `${STATUS_SESSAO_URL}?instance_id=${encodeURIComponent(instanceId)}`,
+      { headers: await authHeaders() }
     )
     if (!res.ok) return null
     const data = await res.json()
@@ -60,7 +73,8 @@ export default function ConectarWhatsappSection() {
   async function refreshQr(id: string) {
     try {
       const res = await fetch(
-        `${ATUALIZAR_QR_URL}?instance_id=${encodeURIComponent(id)}`
+        `${ATUALIZAR_QR_URL}?instance_id=${encodeURIComponent(id)}`,
+        { headers: await authHeaders() }
       )
       if (!res.ok) return
       const blob = await res.blob()
@@ -111,7 +125,7 @@ export default function ConectarWhatsappSection() {
     try {
       const res = await fetch(CRIAR_SESSAO_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(await authHeaders()) },
         body: JSON.stringify({ instance_id: instanceId }),
       })
       if (!res.ok) throw new Error('Não foi possível gerar o QR Code.')
@@ -168,7 +182,7 @@ export default function ConectarWhatsappSection() {
     try {
       await fetch(DESCONECTAR_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(await authHeaders()) },
         body: JSON.stringify({ instance_id: instanceId }),
       })
     } catch {

@@ -37,13 +37,17 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/app/clientes/novo', label: 'Cadastrar Cliente', icon: UserPlus, adminOnly: true },
 ]
 
-// Vertical de pedidos (restaurante/marmitaria): troca Contatos/Agendamentos por Pedidos/Cardápio.
+// Vertical de pedidos (restaurante/marmitaria): troca Contatos/Agendamentos por Pedidos/Cardápio
+// e esconde Estatísticas (só tem métricas de agendamento).
 const NAV_ITEMS_PEDIDOS: NavItem[] = NAV_ITEMS.flatMap((item) => {
   if (item.to === '/app/contatos') {
     return [{ to: '/app/pedidos', label: 'Pedidos', icon: ClipboardList }]
   }
   if (item.to === '/app/agendamentos') {
     return [{ to: '/app/cardapio', label: 'Cardápio', icon: UtensilsCrossed }]
+  }
+  if (item.to === '/app/estatisticas') {
+    return []
   }
   return [item]
 })
