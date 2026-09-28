@@ -17,6 +17,7 @@ import { supabase } from '@/lib/supabase'
 import { useInstance } from '@/context/InstanceContext'
 import { formatCurrency, formatDateTime } from '@/lib/format'
 import { AgendamentoStatusBadge } from '@/components/ui/StatusBadge'
+import DashboardPedidos from '@/components/dashboard/DashboardPedidos'
 import type { LeadPaciente } from '@/types/database'
 
 interface DashboardStats {
@@ -70,7 +71,17 @@ function pctChange(current: number, previous: number) {
   return ((current - previous) / previous) * 100
 }
 
+/** Escolhe o dashboard pela vertical do cliente (mesmo padrão do Sidebar). */
 export default function Dashboard() {
+  const { instances, instanceId } = useInstance()
+  const tipoNegocio = instances.find((i) => i.instance_id === instanceId)?.tipo_negocio
+  if (instanceId && tipoNegocio === 'pedidos') {
+    return <DashboardPedidos key={instanceId} instanceId={instanceId} />
+  }
+  return <DashboardAgendamento />
+}
+
+function DashboardAgendamento() {
   const { instanceId } = useInstance()
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<DashboardStats>({

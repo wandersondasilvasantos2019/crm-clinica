@@ -11,7 +11,7 @@ export function formatCurrency(value: number): string {
  * exactly the browser's UTC offset). Treat any string missing an explicit
  * 'Z' or +hh:mm/-hh:mm offset as UTC before parsing.
  */
-function parseAsUtc(value: string | Date): Date {
+export function parseAsUtc(value: string | Date): Date {
   if (value instanceof Date) return value
   const hasTimezone = /Z$|[+-]\d{2}:?\d{2}$/.test(value)
   return new Date(hasTimezone ? value : `${value}Z`)
