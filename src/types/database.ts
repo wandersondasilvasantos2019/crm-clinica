@@ -4,6 +4,7 @@ export type ConversaRole = 'paciente' | 'ia'
 export type UsuarioRole = 'admin' | 'cliente'
 export type TipoNegocio = 'agendamento' | 'pedidos'
 export type StatusPedido = 'novo' | 'confirmado' | 'preparando' | 'entregue' | 'cancelado'
+export type EntregaModo = 'por_km' | 'fixa'
 export type AlertaSom = 'alarme' | 'campainha' | 'bipe' | 'suave'
 
 export interface Usuario {
@@ -29,6 +30,11 @@ export interface ConfigCliente {
   // Vertical de pedidos — usados pela IA ao fechar o pedido.
   endereco: string | null
   taxa_entrega_por_km: number | null
+  /** 'por_km' = taxa_entrega_por_km × distância; 'fixa' = taxa_entrega_fixa para qualquer endereço. */
+  entrega_modo: EntregaModo | null
+  taxa_entrega_fixa: number | null
+  /** Distância máxima de entrega em km (vazio = sem limite). */
+  entrega_max_km: number | null
   formas_pagamento: string | null
 }
 

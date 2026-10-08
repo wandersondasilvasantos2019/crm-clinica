@@ -73,7 +73,7 @@ export default function ConfigClienteSection() {
 
         <div>
           <label className="label" htmlFor="numero_humano">
-            Número de transbordo humano
+            Número de atendente humano
           </label>
           <input
             id="numero_humano"
