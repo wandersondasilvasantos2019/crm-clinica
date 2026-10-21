@@ -118,9 +118,8 @@ export default function ConfigClienteSection() {
             Instruções para o agente
           </label>
           <p className="mb-2 text-sm text-gray-400">
-            Avisos do dia e o que o agente deve dizer ou fazer em situações específicas. O tom de
-            voz fica no campo acima; preços e cardápio ficam no cadastro de itens. Estas instruções
-            não substituem as regras do sistema.
+            Avisos do dia e o que o agente deve dizer ou fazer em situações específicas. Estas
+            instruções não substituem as regras do sistema.
           </p>
           <textarea
             id="instrucoes_agente"
