@@ -9,6 +9,7 @@ export default function ConfigClienteSection() {
   const [horarioFuncionamento, setHorarioFuncionamento] = useState('')
   const [tomVoz, setTomVoz] = useState('')
   const [numeroHumano, setNumeroHumano] = useState('')
+  const [instrucoesAgente, setInstrucoesAgente] = useState('')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   // Preenche o formulário uma vez por negócio: o refreshInstances() disparado ao
@@ -23,6 +24,7 @@ export default function ConfigClienteSection() {
     setHorarioFuncionamento(current?.horario_funcionamento ?? '')
     setTomVoz(current?.tom_voz ?? '')
     setNumeroHumano(current?.numero_humano ?? '')
+    setInstrucoesAgente(current?.instrucoes_agente ?? '')
   }, [instanceId, instances])
 
   async function handleSubmit(e: FormEvent) {
@@ -38,6 +40,7 @@ export default function ConfigClienteSection() {
         horario_funcionamento: horarioFuncionamento,
         tom_voz: tomVoz,
         numero_humano: numeroHumano,
+        instrucoes_agente: instrucoesAgente.trim() || null,
       })
       .eq('instance_id', instanceId)
 
@@ -108,6 +111,31 @@ export default function ConfigClienteSection() {
             onChange={(e) => setTomVoz(e.target.value)}
             placeholder="Formal, empático, direto..."
           />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label className="label" htmlFor="instrucoes_agente">
+            Instruções para o agente
+          </label>
+          <p className="mb-2 text-sm text-gray-400">
+            Escreva aqui como o agente deve atender: tom, avisos do dia, o que dizer em situações
+            específicas. Preços e cardápio ficam no cadastro de itens; estas instruções não
+            substituem as regras do sistema.
+          </p>
+          <textarea
+            id="instrucoes_agente"
+            className="input"
+            rows={6}
+            maxLength={2000}
+            value={instrucoesAgente}
+            onChange={(e) => setInstrucoesAgente(e.target.value)}
+            placeholder={
+              'Ex.: Hoje não temos feijoada.\nSe o cliente reclamar, peça desculpas e passe para o atendente humano.'
+            }
+          />
+          <p className="mt-1 text-right text-xs text-gray-400">
+            {instrucoesAgente.length} / 2000
+          </p>
         </div>
 
         <div className="sm:col-span-2 flex items-center gap-3">

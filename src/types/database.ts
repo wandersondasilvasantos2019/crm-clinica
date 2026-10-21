@@ -36,6 +36,8 @@ export interface ConfigCliente {
   /** Distância máxima de entrega em km (vazio = sem limite). */
   entrega_max_km: number | null
   formas_pagamento: string | null
+  /** Texto livre do dono, anexado ao prompt do agente. */
+  instrucoes_agente: string | null
 }
 
 export interface Servico {
