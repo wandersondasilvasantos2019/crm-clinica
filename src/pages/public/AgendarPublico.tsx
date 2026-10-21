@@ -20,7 +20,10 @@ export default function AgendarPublico() {
 
   const [clinicLoading, setClinicLoading] = useState(true)
   const [clinicError, setClinicError] = useState(false)
-  const [clinic, setClinic] = useState<ConfigCliente | null>(null)
+  const [clinic, setClinic] = useState<Pick<
+    ConfigCliente,
+    'instance_id' | 'slug' | 'tipo_negocio' | 'nome_empresa' | 'logo_url' | 'cor_primaria'
+  > | null>(null)
 
   const [catalogLoading, setCatalogLoading] = useState(true)
   const [servicos, setServicos] = useState<Servico[]>([])
@@ -48,7 +51,7 @@ export default function AgendarPublico() {
       setClinicLoading(true)
       const { data, error } = await supabasePublic
         .from('config_cliente')
-        .select('*')
+        .select('instance_id, slug, tipo_negocio, nome_empresa, logo_url, cor_primaria')
         .eq('slug', slug)
         .maybeSingle()
 
